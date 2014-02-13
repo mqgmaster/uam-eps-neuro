@@ -1,0 +1,32 @@
+atributos representacion_de_classe
+9 2
+
+representacion_de_classe = 2 digitos
+classe 
+1 0
+
+9 2
+0.2 0.1 0.1 0.1 0.2 0.1 0.2 0.1 0.1 1 0
+
+
+classes:
+
+1 0 = 1 ------> -1
+0 1 = 2 ------> +1
+
+-------------------
+
+
+1. ler arquivo
+2. embaralhar linhas
+3. dividir dados entre dados de treino e teste
+
+
+
+--------------
+
+perceptron slide 29 de 2.3 2.4
+
+dicas: 
+
+theta sempre perto de 0: 0.01....0.05...0.1.....0.2
