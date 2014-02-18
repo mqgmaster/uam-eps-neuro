@@ -1,22 +1,45 @@
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
 
 
 public class Neural {
 
 	private ArrayList<ArrayList<Double>> weighs;
-	private ArrayList<Neuron> inputs; //Data
-	private ArrayList<Neuron> outputs;
-	private ArrayList<Neuron> capas;
-	
-	public int calculateValues(ArrayList<Integer> data){
-		
-		for(int i=0; i<weighs.size(); i++){
-			for(int j=0; j<weighs.get(i).size(); j++){
-				
+	private ArrayList<ArrayList<Neuron>> layer;
+	private ArrayList<Neuron> neural;
+	/**
+	 * Calcula los valores de cada neurona de la red
+	 *  en un tiempo dada una entrada
+	 * @param data
+	 * @return
+	 */
+	public ArrayList<Neuron> calculateValues(ArrayList<Integer> data){
+		for(int i=0; i<neural.size(); i++){
+			double sum = 0.0;
+			Iterator it = neural.get(i).getSignals().entrySet().iterator();		
+			while(it.hasNext()){
+				Entry<Neuron,Double> e = (Entry<Neuron,Double>) it.next();
+				sum += (e.getKey().getValue() * e.getValue());
+			}
+			if(sum>=neural.get(i).getThreadhold()){
+				neural.get(i).setValue(1);
+			}else{
+				neural.get(i).setValue(0);
 			}
 		}
 		
-		return 0;
+		return neural;
+	}
+	
+	public void createNeural(ArrayList<Integer> data){
+		layer = new ArrayList<ArrayList<Neuron>>();
+		layer.add(new ArrayList<Neuron>());
+		for(int i=0; i< data.size(); i++){
+			layer.get(0).add(new Neuron(0,data.get(i)));
+		}
+		
 	}
 	
 	public ArrayList<ArrayList<Double>> getWeighs() {
@@ -25,23 +48,11 @@ public class Neural {
 	public void setWeighs(ArrayList<ArrayList<Double>> weighs) {
 		this.weighs = weighs;
 	}
-	public ArrayList<Neuron> getInputs() {
-		return inputs;
+	public ArrayList<ArrayList<Neuron>> getLayer() {
+		return layer;
 	}
-	public void setInputs(ArrayList<Neuron> inputs) {
-		this.inputs = inputs;
-	}
-	public ArrayList<Neuron> getOutputs() {
-		return outputs;
-	}
-	public void setOutputs(ArrayList<Neuron> outputs) {
-		this.outputs = outputs;
-	}
-	public ArrayList<Neuron> getCapas() {
-		return capas;
-	}
-	public void setCapas(ArrayList<Neuron> capas) {
-		this.capas = capas;
+	public void setLayer(ArrayList<ArrayList<Neuron>> layer) {
+		this.layer = layer;
 	}
 	
 }
