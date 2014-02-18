@@ -46,4 +46,6 @@ public class DataFile {
 	public ArrayList<ArrayList<Integer>> getData() {
 		return data;
 	}
+	
+	
 }
