@@ -6,7 +6,8 @@ public class InputData {
 	
 	private Double totalInputs;
 	private Double totalClass; 
-	private ArrayList<ArrayList<Double>> inputData = new ArrayList<>();
+	//Array de Array de entradas
+	private ArrayList<InputRow> inputData = new ArrayList<>();
 	
 	public InputData(ArrayList<String> fileLines) {
 		String params = fileLines.remove(0);
@@ -17,16 +18,18 @@ public class InputData {
 		System.out.println("inputs " + totalInputs + " classes: " + totalClass);
 		//Collections.shuffle(list);
 		for (String inputs : fileLines) {
-			ArrayList<Double> inputDataLine = new ArrayList<>();
+			InputRow inputRow = new InputRow();
 			String[] inputsArray = inputs.split(" ");
+			int i = 0;
 			for (String input : inputsArray) {
-				inputDataLine.add(Double.valueOf(input));
+				if (i < totalInputs) {
+					inputRow.add(Double.valueOf(input));
+					i++;
+				} else {
+					inputRow.addToTargetRepresentation(input);
+				}
 			}
-			for (Double input : inputDataLine) {
-				System.out.print(input);
-				System.out.print(" ");
-			}
-			inputData.add(inputDataLine);
+			inputData.add(inputRow);
 			System.out.println(" ");
 		}
 	}
@@ -39,7 +42,7 @@ public class InputData {
 		return totalClass;
 	}
 	
-	public ArrayList<ArrayList<Double>> getData() {
+	public ArrayList<InputRow> getData() {
 		return inputData;
 	}
 }

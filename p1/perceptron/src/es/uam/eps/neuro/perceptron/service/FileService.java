@@ -22,10 +22,5 @@ public class FileService {
 		} 
 		return list;
 	}
-	
-	public static InputData getData(String filename) {
-		ArrayList<String> list = FileService.read(filename);
-		return new InputData(list);
-	}
 }
 
