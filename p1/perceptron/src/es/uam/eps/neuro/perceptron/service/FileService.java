@@ -5,6 +5,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import es.uam.eps.neuro.perceptron.domain.InputData;
+
 public class FileService {
 	
 	public static ArrayList<String> read(String filename) {
@@ -19,6 +21,11 @@ public class FileService {
 			e.printStackTrace();
 		} 
 		return list;
+	}
+	
+	public static InputData getData(String filename) {
+		ArrayList<String> list = FileService.read(filename);
+		return new InputData(list);
 	}
 }
 

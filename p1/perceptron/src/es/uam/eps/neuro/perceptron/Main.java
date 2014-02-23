@@ -1,25 +1,14 @@
 package es.uam.eps.neuro.perceptron;
 
-import java.util.ArrayList;
-import java.util.Collections;
-
+import es.uam.eps.neuro.perceptron.domain.InputData;
 import es.uam.eps.neuro.perceptron.service.FileService;
 
 public class Main {
 	
 	public static void main(String[] args) {
-		ArrayList<String> list = FileService.read("../problema_real1.txt");
-		String params = list.remove(0);
+		InputData data = FileService.getData("../problema_real1.txt");
+		Perceptron perceptron = new Perceptron(data);
 		
-		System.out.println("base " + params + " haciendo shuffle...");
-		//Collections.shuffle(list);
-		for (String inputs : list) {
-			String[] inputsArray = inputs.split(" ");
-			for (String input : inputsArray) {
-				System.out.print(input + " ");
-			}
-			System.out.println("");
-		}
 	}
 
 }
