@@ -9,7 +9,7 @@ public class InputRow {
 	
 	public void add(Double input) {
 		inputs.add(input);
-		System.out.println("add " + input);
+		//System.out.println("add " + input);
 	}
 
 	public void addToTargetRepresentation(String input) {

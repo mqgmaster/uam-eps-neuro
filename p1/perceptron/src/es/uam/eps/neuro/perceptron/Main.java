@@ -9,6 +9,7 @@ public class Main {
 		InputData data = new InputData(FileService.read("../test.txt"));
 		Perceptron perceptron = new Perceptron(data);
 		perceptron.startTraining();
+		perceptron.startTest();
 		
 	}
 
