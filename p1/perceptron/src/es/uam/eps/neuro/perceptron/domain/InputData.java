@@ -1,13 +1,15 @@
 package es.uam.eps.neuro.perceptron.domain;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class InputData {
 	
 	private Double totalInputs;
 	private Double totalClass; 
 	//Array de Array de entradas
-	private ArrayList<InputRow> inputData = new ArrayList<>();
+	private List<InputRow> inputData = new ArrayList<>();
 	
 	public InputData(ArrayList<String> fileLines) {
 		String params = fileLines.remove(0);
@@ -33,6 +35,12 @@ public class InputData {
 			System.out.println(" ");
 		}
 	}
+	
+	public InputData(List<InputRow> inputData, Double totalInputs, Double totalClass) {
+		this.inputData = inputData;
+		this.totalClass = totalClass;
+		this.totalInputs = totalInputs;
+	}
 
 	public Double getTotalInputs() {
 		return totalInputs;
@@ -42,7 +50,30 @@ public class InputData {
 		return totalClass;
 	}
 	
-	public ArrayList<InputRow> getData() {
+	public List<InputRow> getRows() {
 		return inputData;
+	}
+	
+	public ArrayList<InputData> getData(Double firstPartitionPercentage) {
+		int firstPartitionFinalIndex = (int) (firstPartitionPercentage * inputData.size());
+		int secondPartitionStartIndex;
+		if (firstPartitionPercentage == 1.0) {
+			secondPartitionStartIndex = 0;
+		} else {
+			secondPartitionStartIndex = firstPartitionFinalIndex;
+		}
+		Collections.shuffle(inputData);
+		ArrayList<InputData> dividedData = new ArrayList<>();
+		InputData firstPart = new InputData(
+				inputData.subList(0, firstPartitionFinalIndex),
+				this.totalInputs, 
+				this.totalClass);
+		InputData secondPart = new InputData(
+				inputData.subList(secondPartitionStartIndex, inputData.size()),
+				this.totalInputs, 
+				this.totalClass);
+		dividedData.add(firstPart);
+		dividedData.add(secondPart);
+		return dividedData;
 	}
 }
