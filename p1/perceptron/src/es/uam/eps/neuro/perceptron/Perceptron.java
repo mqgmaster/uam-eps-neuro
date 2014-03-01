@@ -140,7 +140,7 @@ public class Perceptron {
 			System.out.println("");
 		}
 		
-		System.out.println("Errores en test: " + testErrors + ". " + (double) testErrors/testData.getRows().size());
+		System.out.println("Errores en test: " + testErrors + ". " + ((double) testErrors/testData.getRows().size()) * 100 + "%");
 	}
 	
 	private void printWeights() {

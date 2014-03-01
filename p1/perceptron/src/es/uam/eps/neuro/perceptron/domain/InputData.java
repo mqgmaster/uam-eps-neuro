@@ -7,21 +7,57 @@ import java.util.List;
 public class InputData {
 	
 	private Double totalInputs;
-	private Double totalClass; 
+	private Double totalTargets; 
+	private String params;
+	private ArrayList<String> fileLines;
 	//Array de Array de entradas
 	private List<InputRow> inputData = new ArrayList<>();
 	
 	public InputData(ArrayList<String> fileLines) {
-		String params = fileLines.remove(0);
+		this.fileLines = fileLines;
+		params = fileLines.remove(0);
 		String[] paramsVector = params.split(" ");
 		totalInputs = Double.valueOf(paramsVector[0]);
-		totalClass = Double.valueOf(paramsVector[1]);
+		totalTargets = Double.valueOf(paramsVector[1]);
 		
-		System.out.println("inputs " + totalInputs + " classes: " + totalClass);
-		//Collections.shuffle(list);
+		System.out.println("inputs " + totalInputs + " classes: " + totalTargets);
+	}
+	
+	public InputData(List<InputRow> inputData, Double totalInputs, Double totalTargets) {
+		this.inputData = inputData;
+		this.totalTargets = totalTargets;
+		this.totalInputs = totalInputs;
+	}
+
+	public Double getTotalInputs() {
+		return totalInputs;
+	}
+
+	public Double getTotalTargets() {
+		return totalTargets;
+	}
+	
+	public List<InputRow> getRows() {
+		return inputData;
+	}
+	
+	public ArrayList<String> shuffleFileLines() {
+		try {
+			Collections.shuffle(fileLines);
+			//first line params
+			fileLines.add(0, params);
+		} catch (Exception e) {
+			System.out.println("Error in raw data (original file lines)");
+		}
+		return fileLines;
+	}
+	
+	private void prepareRows() {
 		for (String inputs : fileLines) {
 			InputRow inputRow = new InputRow();
-			String[] inputsArray = inputs.split(" ");
+			//remove duplicate spaces. Eso es un overhead. El archivo de entrada
+			//deberia ser standard.
+			String[] inputsArray = inputs.replaceAll("\\s+", " ").split(" ");
 			int i = 0;
 			for (String input : inputsArray) {
 				if (i < totalInputs) {
@@ -32,29 +68,11 @@ public class InputData {
 				}
 			}
 			inputData.add(inputRow);
-			System.out.println(" ");
 		}
 	}
 	
-	public InputData(List<InputRow> inputData, Double totalInputs, Double totalClass) {
-		this.inputData = inputData;
-		this.totalClass = totalClass;
-		this.totalInputs = totalInputs;
-	}
-
-	public Double getTotalInputs() {
-		return totalInputs;
-	}
-
-	public Double getTotalClass() {
-		return totalClass;
-	}
-	
-	public List<InputRow> getRows() {
-		return inputData;
-	}
-	
 	public ArrayList<InputData> getData(Double firstPartitionPercentage) {
+		prepareRows();
 		int firstPartitionFinalIndex = (int) (firstPartitionPercentage * inputData.size());
 		int secondPartitionStartIndex;
 		if (firstPartitionPercentage == 1.0) {
@@ -62,16 +80,16 @@ public class InputData {
 		} else {
 			secondPartitionStartIndex = firstPartitionFinalIndex;
 		}
-		Collections.shuffle(inputData);
+		
 		ArrayList<InputData> dividedData = new ArrayList<>();
 		InputData firstPart = new InputData(
 				inputData.subList(0, firstPartitionFinalIndex),
 				this.totalInputs, 
-				this.totalClass);
+				this.totalTargets);
 		InputData secondPart = new InputData(
 				inputData.subList(secondPartitionStartIndex, inputData.size()),
 				this.totalInputs, 
-				this.totalClass);
+				this.totalTargets);
 		dividedData.add(firstPart);
 		dividedData.add(secondPart);
 		return dividedData;
