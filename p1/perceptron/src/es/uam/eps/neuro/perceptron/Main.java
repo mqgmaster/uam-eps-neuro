@@ -6,11 +6,15 @@ import es.uam.eps.neuro.perceptron.service.FileService;
 public class Main {
 	
 	public static void main(String[] args) {
-		InputData data = new InputData(FileService.read("../shuffledtest.txt"));
-		//FileService.save("../shuffledtest.txt", data.shuffleFileLines());
-		Perceptron perceptron = new Perceptron(data, 2.0/3.0, 1);
-		perceptron.startTraining();
-		perceptron.startTest();
+		////para crear el archivo shuffled
+		//InputData data = new InputData(FileService.read("../problema_real1.txt"));
+		//FileService.save("../shuffled.txt", data.shuffleFileLines());
+		
+		/////para probar
+		//InputData data = new InputData(FileService.read("../shuffled.txt"));
+		//Adaline neuron = new Adaline(data, 2.0/3.0, 100);
+		//neuron.startTraining();
+		//neuron.startTest();
 	}
 
 }

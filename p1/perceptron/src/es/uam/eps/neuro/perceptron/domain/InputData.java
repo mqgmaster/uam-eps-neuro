@@ -6,8 +6,8 @@ import java.util.List;
 
 public class InputData {
 	
-	private Double totalInputs;
-	private Double totalTargets; 
+	private int totalInputs;
+	private int totalTargets; 
 	private String params;
 	private ArrayList<String> fileLines;
 	//Array de Array de entradas
@@ -17,23 +17,23 @@ public class InputData {
 		this.fileLines = fileLines;
 		params = fileLines.remove(0);
 		String[] paramsVector = params.split(" ");
-		totalInputs = Double.valueOf(paramsVector[0]);
-		totalTargets = Double.valueOf(paramsVector[1]);
+		totalInputs = Integer.valueOf(paramsVector[0]);
+		totalTargets = Integer.valueOf(paramsVector[1]);
 		
 		System.out.println("inputs " + totalInputs + " classes: " + totalTargets);
 	}
 	
-	public InputData(List<InputRow> inputData, Double totalInputs, Double totalTargets) {
+	public InputData(List<InputRow> inputData, Integer totalInputs, Integer totalTargets) {
 		this.inputData = inputData;
 		this.totalTargets = totalTargets;
 		this.totalInputs = totalInputs;
 	}
 
-	public Double getTotalInputs() {
+	public int getTotalInputs() {
 		return totalInputs;
 	}
 
-	public Double getTotalTargets() {
+	public int getTotalTargets() {
 		return totalTargets;
 	}
 	
