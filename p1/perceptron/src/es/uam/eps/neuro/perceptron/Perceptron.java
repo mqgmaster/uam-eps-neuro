@@ -1,5 +1,7 @@
 package es.uam.eps.neuro.perceptron;
 
+import java.io.BufferedWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import es.uam.eps.neuro.perceptron.domain.InputData;
@@ -33,6 +35,13 @@ public class Perceptron {
 			inputWeights.add(0.0);
 		}
 		this.maxTrainingRounds = maxTrainingRounds;
+	}
+	
+	public Perceptron(InputData data, Double trainingDataPercentage, ArrayList<Double> inputWeights) {
+		ArrayList<InputData> allData = data.getData(trainingDataPercentage);
+		trainingData = allData.get(0);
+		testData = allData.get(1);
+		this.inputWeights = inputWeights;
 	}
 	
 	public void startTraining() {
@@ -103,7 +112,7 @@ public class Perceptron {
 		return "Undefined";
 	}
 	
-	public void startTest() {
+	public double startTest(BufferedWriter bw) throws IOException {
 		System.out.println("\nStarting Test");
 		
 		for (int i = 0; i < testData.getRows().size(); i++) {
@@ -122,18 +131,21 @@ public class Perceptron {
 			Double neuronOutput = calculateResponse(partialResponse);
 			
 			if (neuronOutput == CLASS_ONE) {
+				if(bw!=null) bw.write("1\n");
 				System.out.print("Classe: predicha 1\treal: " + getTargetLabelFromInputRow(inputRow));
 				if (!inputRow.getTargetRepresentation().equals(CLASS_ONE_STRING)) {
 					testErrors++;
 					System.out.print("\tError");
 				}
 			} else if (neuronOutput == CLASS_TWO) {
+				if(bw!=null) bw.write("2\n");
 				System.out.print("Classe: predicha 2\treal: " + getTargetLabelFromInputRow(inputRow));
 				if (!inputRow.getTargetRepresentation().equals(CLASS_TWO_STRING)) {
 					testErrors++;
 					System.out.print("\tError");
 				}
 			} else {
+				if(bw!=null) bw.write("0\n");
 				testErrors++;
 				System.out.print("Classe: predicha Undefined\treal: " + getTargetLabelFromInputRow(inputRow));
 				System.out.print("\tError");
@@ -142,6 +154,7 @@ public class Perceptron {
 		}
 		
 		System.out.println("Errores en test: " + testErrors + ". " + ((double) testErrors/testData.getRows().size()) * 100 + "%");
+		return ((double) testErrors/testData.getRows().size()) * 100;
 	}
 	
 	protected void printWeights() {
@@ -183,4 +196,9 @@ public class Perceptron {
 		}
 		return bias + sum;
 	}
+
+	public ArrayList<Double> getInputWeights() {
+		return inputWeights;
+	}
+	
 }

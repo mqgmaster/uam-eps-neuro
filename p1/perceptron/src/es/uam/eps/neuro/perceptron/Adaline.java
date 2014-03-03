@@ -1,5 +1,7 @@
 package es.uam.eps.neuro.perceptron;
 
+import java.io.BufferedWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import es.uam.eps.neuro.perceptron.domain.InputData;
@@ -8,12 +10,12 @@ import es.uam.eps.neuro.perceptron.domain.InputRow;
 public class Adaline {
 	
     public static final Double THRESHOLD = 0.0; //umbral
-	public static final Double LEARNING_RATE = 0.1; //constante de entrenamiento
+	public static final Double LEARNING_RATE = 0.3; //constante de entrenamiento
 	public static final Double CLASS_ONE = 1.0;
 	public static final String CLASS_ONE_STRING = "01"; //debe ser exactamente la misma del fichero de entrada
 	public static final Double CLASS_TWO = -1.0;
 	public static final String CLASS_TWO_STRING = "10"; //debe ser exactamente la misma del fichero de entrada
-	public static final Double TRAINING_WEIGHT_CHANGE_TOLERANCE = 0.2;
+	public static final Double TRAINING_WEIGHT_CHANGE_TOLERANCE = 0.0001;
 	//public static final Double UNDEFINED = 0.0;
 	
 	protected Double bias; //sesgo
@@ -28,6 +30,13 @@ public class Adaline {
 		this.maxTrainingRounds = maxTrainingRounds-1;
 		prepareData(data, trainingDataPercentage);
 		initializeWeights(data.getTotalInputs());
+	}
+	
+	public Adaline(InputData data, Double trainingDataPercentage, ArrayList<Double> inputWeights, double bias) {
+		this.maxTrainingRounds = maxTrainingRounds-1;
+		prepareData(data, trainingDataPercentage);
+		this.inputWeights = inputWeights;
+		this.bias = bias;
 	}
 
 	private void prepareData(InputData data, Double trainingDataPercentage) {
@@ -77,6 +86,7 @@ public class Adaline {
 			}
 			
 			if (i == trainingData.getRows().size()-1) {
+				System.out.println("Diff: "+biggerWeightChange+"\t");
 				if (trainingRounds < maxTrainingRounds && biggerWeightChange > TRAINING_WEIGHT_CHANGE_TOLERANCE) {
 					trainingRounds++;
 					i = -1;
@@ -124,7 +134,7 @@ public class Adaline {
 		return "Undefined";
 	}
 	
-	public void startTest() {
+	public double startTest(BufferedWriter bw) throws IOException {
 		System.out.println("\nStarting Test");
 		
 		for (int i = 0; i < testData.getRows().size(); i++) {
@@ -143,12 +153,14 @@ public class Adaline {
 			Double neuronOutput = calculateResponse(partialResponse);
 			
 			if (neuronOutput == CLASS_ONE) {
+				if(bw!=null) bw.write("1\n");
 				System.out.print("Classe: predicha 1\treal: " + getTargetLabelFromInputRow(inputRow));
 				if (!inputRow.getTargetRepresentation().equals(CLASS_ONE_STRING)) {
 					testErrors++;
 					System.out.print("\tError");
 				}
 			} else {
+				if(bw!=null) bw.write("2\n");
 				System.out.print("Classe: predicha 2\treal: " + getTargetLabelFromInputRow(inputRow));
 				if (!inputRow.getTargetRepresentation().equals(CLASS_TWO_STRING)) {
 					testErrors++;
@@ -159,6 +171,8 @@ public class Adaline {
 		}
 		
 		System.out.println("Errores en test: " + testErrors + ". " + ((double) testErrors/testData.getRows().size()) * 100 + "%");
+		
+		return ((double) testErrors/testData.getRows().size()) * 100;
 	}
 	
 	protected void printWeights() {
@@ -184,4 +198,13 @@ public class Adaline {
 		}
 		return bias + sum;
 	}
+
+	public ArrayList<Double> getInputWeights() {
+		return inputWeights;
+	}
+
+	public Double getBias() {
+		return bias;
+	}
+	
 }

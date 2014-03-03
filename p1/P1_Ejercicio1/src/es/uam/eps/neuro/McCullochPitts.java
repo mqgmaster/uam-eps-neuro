@@ -38,7 +38,7 @@ public class McCullochPitts {
 		}
 	}
 	
-	public ArrayList<Neuron> neural(ArrayList<Integer> input){
+	public ArrayList<Neuron> neural(ArrayList<Integer> input, PrintWriter pw){
 		double sum = 0;
 		
 		// Se activa hacia arriba Y1
@@ -125,8 +125,12 @@ public class McCullochPitts {
 		}
 		System.out.println();
 		
-		System.out.println("Y1="+layerY.get(0).getValue()+" Y2="+layerY.get(1).getValue());
-
+		//System.out.println("Y1="+layerY.get(0).getValue()+" Y2="+layerY.get(1).getValue());
+		pw.println(layerX.get(0)+" "+layerX.get(1)+" "+layerX.get(2)+" "+
+		layerZ.get(0).getValue()+" "+layerZ.get(1).getValue()+" "+layerZ.get(2).getValue()+" "+
+		layerA.get(0).getValue()+" "+layerA.get(1).getValue()+" "+layerA.get(2).getValue()+" "+
+		layerB.get(0).getValue()+" "+layerB.get(1).getValue()+" "+layerB.get(2).getValue()+" "+
+		layerY.get(0).getValue()+" "+layerY.get(1).getValue()+"\n");
 		
 		return layerY;
 	}
@@ -136,13 +140,13 @@ public class McCullochPitts {
 	public static void main(String[] args) {
 
 		// Comprobar los argumentos de entrada
-		if (args.length < 1) {
-			System.out.println("Introduzca el nombre del fichero de entradas.");
+		if (args.length < 2) {
+			System.out.println("Introduzca el nombre del fichero de entradas y el de salidas.");
 			return;
 		}
 
 		String inputFile = args[0];
-		String outputFile = "results.txt";
+		String outputFile = args[1];
 
 		McCullochPitts mcp = new McCullochPitts();
 
@@ -179,16 +183,16 @@ public class McCullochPitts {
 			aux = new ArrayList<Integer>();
 			for(int i=0; i<3; i++)
 				aux.add(0);
-			
+			pw.println("x1 x2 x3 z1 z2 z3 a1 a2 a3 b1 b2 b3 y1 y2");
 			for(int i=0; i<mcp.data.size()+2; i++){
 				if(i>=mcp.data.size()){
-					mcp.neural(aux);
+					mcp.neural(aux, pw);
 				}else{
-					mcp.neural(mcp.data.get(i));
+					mcp.neural(mcp.data.get(i), pw);
 				}
 				System.out.println("Y1="+mcp.layerY.get(0).getValue()+" Y2="+mcp.layerY.get(1).getValue());
 
-				pw.println(i+"\tY1="+mcp.layerY.get(0).getValue()+" Y2="+mcp.layerY.get(1).getValue());// Escribe en el fichero de salida
+				//pw.println(i+"\tY1="+mcp.layerY.get(0).getValue()+" Y2="+mcp.layerY.get(1).getValue());// Escribe en el fichero de salida
 
 			}
 			
