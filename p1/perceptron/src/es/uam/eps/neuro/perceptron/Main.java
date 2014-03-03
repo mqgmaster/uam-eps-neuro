@@ -1,10 +1,6 @@
 package es.uam.eps.neuro.perceptron;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
 
 import es.uam.eps.neuro.perceptron.domain.InputData;
 import es.uam.eps.neuro.perceptron.service.FileService;
@@ -13,19 +9,25 @@ public class Main {
 	
 	public static void main(String[] args) throws IOException {
 		InputData data;
-		InputData data2;
 		//para crear el archivo shuffled
-		/*data = new InputData(FileService.read("../problema_real1.txt"));
-		FileService.save("../shuffled.txt", data.shuffleFileLines());
-		*/
+//		data = new InputData(FileService.read("../problema_real2_no_etiquetados.txt"));
+//		FileService.save("../shu_problema_real2_no_etiquetados.txt", data.shuffleFileLines());
+		
 		///para probar
-		/*data = new InputData(FileService.read("../shuffled.txt"));
-		Adaline neuron = new Adaline(data, 2.0/3.0, 1000);
+		data = new InputData(FileService.read("../shu_problema_real2.txt"));
+		Perceptron neuron = new Perceptron(data, 2.0/3.0, 1);
 		neuron.startTraining();
-		neuron.startTest(null);
-		*/
+		
+		//para cambiar los datos de la neurona sin cambiar pesos
+//		InputData newdata = new InputData(FileService.read("../shu_problema_real2_no_etiquetados.txt"));
+//		neuron.setData(newdata, 1.0);
+		neuron.startTest();
+		
+		//para grabar en fichero la salida de la neurona
+		//FileService.save("../res_shu_problema_real2_ada.txt", neuron.getOutputData().getFileLines());
+		
 				
-		/* APARTADO 3 */
+		/* APARTADO 3 
 		
 		data = new InputData(FileService.read("../shuffled_pr2.txt"));
 		Perceptron neuron;

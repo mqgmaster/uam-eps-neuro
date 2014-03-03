@@ -13,7 +13,11 @@ public class InputRow {
 	}
 
 	public void addToTargetRepresentation(String input) {
-		target += input;
+		if (target.isEmpty()) {
+			target = input;
+		} else {
+			target = target + " " + input;
+		}
 	}
 	
 	public Double get(int index) {
