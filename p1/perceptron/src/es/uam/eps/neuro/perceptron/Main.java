@@ -1,6 +1,7 @@
 package es.uam.eps.neuro.perceptron;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import es.uam.eps.neuro.perceptron.domain.InputData;
 import es.uam.eps.neuro.perceptron.service.FileService;
@@ -10,40 +11,46 @@ public class Main {
 	public static void main(String[] args) throws IOException {
 		InputData data;
 		//para crear el archivo shuffled
-//		data = new InputData(FileService.read("../problema_real2_no_etiquetados.txt"));
-//		FileService.save("../shu_problema_real2_no_etiquetados.txt", data.shuffleFileLines());
+		//data = new InputData(FileService.read("../problema_real1.txt"));
+		//FileService.save("../shu_problema_real1.txt", data.shuffleFileLines());
 		
 		///para probar
-		data = new InputData(FileService.read("../shu_problema_real2.txt"));
-		Perceptron neuron = new Perceptron(data, 2.0/3.0, 1);
-		neuron.startTraining();
+//		data = new InputData(FileService.read("../shu_problema_real2.txt"));
+//		Perceptron neuron = new Perceptron(data, 2.0/3.0, 1);
+//		neuron.startTraining();
 		
 		//para cambiar los datos de la neurona sin cambiar pesos
 //		InputData newdata = new InputData(FileService.read("../shu_problema_real2_no_etiquetados.txt"));
 //		neuron.setData(newdata, 1.0);
-		neuron.startTest();
+//		neuron.startTest();
 		
 		//para grabar en fichero la salida de la neurona
 		//FileService.save("../res_shu_problema_real2_ada.txt", neuron.getOutputData().getFileLines());
 		
 				
-		/* APARTADO 3 
+		/* APARTADO 3 */
 		
-		data = new InputData(FileService.read("../shuffled_pr2.txt"));
-		Perceptron neuron;
-		//Adaline neuron;
+		data = new InputData(FileService.read("../shu_problema_real2.txt"));
+		Perceptron p;
+		Adaline a;
 		int i=0;
 		double numE=Math.pow(2, i);
-		ArrayList<String> results = new ArrayList<>();
+		ArrayList<String> resultsP = new ArrayList<>();
+		ArrayList<String> resultsA = new ArrayList<>();
 		while(numE<=1000){
-			neuron = new Perceptron(data, 2.0/3.0, (int)numE);
-			//neuron = new Adaline(data, 2.0/3.0, (int)numE);
-			neuron.startTraining();
-			results.add(numE+"\t"+Double.toString(neuron.startTest(null)));
+			p = new Perceptron(data, 2.0/3.0, (int)numE);
+			p.startTraining();
+			resultsP.add(numE+"\t"+Double.toString(p.startTest()));
+
+			a = new Adaline(data, 2.0/3.0, (int)numE);
+			a.startTraining();
+			resultsA.add(numE+"\t"+Double.toString(a.startTest()));
+			
 			i++;
 			numE = Math.pow(2, i);
 		}
-		FileService.save("../p_results02_03_2.txt", results);
+		FileService.save("../p_results_10_pr2.txt", resultsP);
+		FileService.save("../a_results_10_pr2.txt", resultsA);
 		
 		
 		/* APARTADO 4 */
