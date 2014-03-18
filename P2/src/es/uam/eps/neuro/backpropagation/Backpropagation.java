@@ -42,6 +42,7 @@ public class Backpropagation {
 		this.learningRate = learningRate;
 		initializeWeights(numNeuronOcultLayer, vbias);
 		for(int i=0; i<numNeuronOcultLayer; i++){
+			vbias.add(Math.random()-0.5);
 			vWeights.add(new ArrayList<Double>());
 			initializeWeights(data.getTotalInputs(), vWeights.get(i));
 		}
@@ -74,9 +75,9 @@ public class Backpropagation {
 		ArrayList<Double> y_ink = new ArrayList<>();
 		ArrayList<Double> yk = new ArrayList<>();
 		
-		for (int i = 0; i < trainingData.getRows().size(); i++) {
+		for (int n = 0; n < trainingData.getRows().size(); n++) {
 			
-			inputRow = trainingData.getRows().get(i);
+			inputRow = trainingData.getRows().get(n);
 			//para cada linha
 //			for (Double input : inputRow.getAll()) {
 //				System.out.print(input + "\t");
@@ -113,8 +114,9 @@ public class Backpropagation {
 			ArrayList<ArrayList<Double>> varWjk = new ArrayList<>();
 			ArrayList<ArrayList<Double>> varVij = new ArrayList<>();
 			
+			//COMPROBAR Tk!!!!!
 			for(int k=0; k<yk.size(); k++){
-				errk.add((trainingData.getRows().get(i).get(k)-yk.get(k))*bipolarSigmoidPrima(yk.get(k)));
+				errk.add((trainingData.getRows().get(n).get(k)-yk.get(k))*bipolarSigmoidPrima(yk.get(k)));
 			}
 			
 			for(int j=0; j<zj.size(); j++){
@@ -145,6 +147,24 @@ public class Backpropagation {
 				varVijBias.add(learningRate*errj.get(j));
 			}
 			
+			/** 8) ACTUALIZA PESOS Y SESGO**/
+			for(int j=0; j<wWeights.size(); j++){
+				for(int k=0; k<wWeights.get(j).size(); k++){
+					wWeights.get(j).set(k, wWeights.get(j).get(k)+varWjk.get(j).get(k));
+				}
+			}
+			for(int k=0; k<wbias.size(); k++){
+				wbias.set(k, wbias.get(k)+varWjkBias.get(k));
+			}
+			
+			for(int i=0; i<vWeights.size(); i++){
+				for(int j=0; j<vWeights.get(i).size(); j++){
+					vWeights.get(i).set(j, vWeights.get(i).get(j)+varWjk.get(i).get(j));
+				}
+			}
+			for(int k=0; k<vbias.size(); k++){
+				vbias.set(k, vbias.get(k)+varVijBias.get(k));
+			}
 			
 			
 			//se target diferente de output
@@ -171,10 +191,10 @@ public class Backpropagation {
 				return;
 			}
 			
-			if (i == trainingData.getRows().size()-1 && hasUpdatedWeights) {
+			if (n == trainingData.getRows().size()-1 && hasUpdatedWeights) {
 				if (trainingRounds < maxTrainingRounds) {
 					trainingRounds++;
-					i = -1;
+					n = -1;
 					hasUpdatedWeights = false;
 				}
 			}
