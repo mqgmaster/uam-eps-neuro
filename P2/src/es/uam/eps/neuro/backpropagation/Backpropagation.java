@@ -69,11 +69,12 @@ public class Backpropagation {
 		System.out.println("Starting Training");
 		InputRow inputRow;
 		
+		ArrayList<Double> z_inj = new ArrayList<>();
+		ArrayList<Double> zj = new ArrayList<>();
+		ArrayList<Double> y_ink = new ArrayList<>();
+		ArrayList<Double> yk = new ArrayList<>();
+		
 		for (int i = 0; i < trainingData.getRows().size(); i++) {
-			ArrayList<Double> z_inj = new ArrayList<>();
-			ArrayList<Double> zj = new ArrayList<>();
-			ArrayList<Double> y_ink = new ArrayList<>();
-			ArrayList<Double> yk = new ArrayList<>();
 			
 			inputRow = trainingData.getRows().get(i);
 			//para cada linha
@@ -103,7 +104,49 @@ public class Backpropagation {
 				yk.add(bipolarSigmoid(y));
 			}
 			
-			/** 6) RETROPORGRAMACION **/			
+			/** 6) RETROPORGRAMACION DEL ERROR DE LA CAPA SALIDA **/
+			ArrayList<Double> errk = new ArrayList<>();
+			ArrayList<Double> err_inj = new ArrayList<>();
+			ArrayList<Double> errj = new ArrayList<>();
+			ArrayList<Double> varWjkBias = new ArrayList<>();
+			ArrayList<Double> varVijBias = new ArrayList<>();
+			ArrayList<ArrayList<Double>> varWjk = new ArrayList<>();
+			ArrayList<ArrayList<Double>> varVij = new ArrayList<>();
+			
+			for(int k=0; k<yk.size(); k++){
+				errk.add((trainingData.getRows().get(i).get(k)-yk.get(k))*bipolarSigmoidPrima(yk.get(k)));
+			}
+			
+			for(int j=0; j<zj.size(); j++){
+				varWjk.add(new ArrayList<Double>());
+				for(int k=0; k<errk.size(); k++){
+					varWjk.get(j).add(learningRate*errk.get(k)* zj.get(j));
+				}
+			}
+			for(int k=0; k<errk.size(); k++){
+				varWjkBias.add(learningRate*errk.get(k));
+			}
+			
+			/** 7) RETROPORGRAMACION DEL ERROR DE LA CAPA OCULTA **/
+			for(int j=0; j<varWjk.size(); j++){
+				for(int k=0; k<varWjk.get(j).size(); k++){
+					err_inj.add(errk.get(k)*varWjk.get(j).get(k));
+				}
+				errj.add(err_inj.get(j)*bipolarSigmoidPrima(zj.get(j)));
+			}
+			
+			for(int j=0; j<inputRow.getAll().size(); j++){
+				varVij.add(new ArrayList<Double>());
+				for(int k=0; k<errj.size(); k++){
+					varVij.get(j).add(learningRate*errj.get(k)* inputRow.get(j));
+				}
+			}
+			for(int j=0; j<errj.size(); j++){
+				varVijBias.add(learningRate*errj.get(j));
+			}
+			
+			
+			
 			//se target diferente de output
 			
 			switch (inputRow.getTargetRepresentation()) {
