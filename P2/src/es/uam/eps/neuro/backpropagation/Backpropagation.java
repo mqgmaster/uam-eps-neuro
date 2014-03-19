@@ -1,6 +1,7 @@
 package es.uam.eps.neuro.backpropagation;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import es.uam.eps.neuro.domain.InputData;
 import es.uam.eps.neuro.domain.InputRow;
@@ -21,8 +22,8 @@ public class Backpropagation {
 	public static final String UNDEFINED_STRING = "0 0";
 	
 	//variables principales del algoritmo
-	private ArrayList<Double> wbias; 						//sesgo inicial
-	private ArrayList<Double> vbias; 						//sesgo inicial
+	private ArrayList<Double> wbias= new ArrayList<>();					//sesgo inicial
+	private ArrayList<Double> vbias= new ArrayList<>();					//sesgo inicial
 	private ArrayList<ArrayList<Double>> wWeights = new ArrayList<>();
 	private ArrayList<ArrayList<Double>> vWeights = new ArrayList<>();
 	
@@ -42,13 +43,11 @@ public class Backpropagation {
 		this.learningRate = learningRate;
 		initializeWeights(numNeuronOcultLayer, vbias);
 		for(int i=0; i<numNeuronOcultLayer; i++){
-			vbias.add(Math.random()-0.5);
 			vWeights.add(new ArrayList<Double>());
 			initializeWeights(data.getTotalInputs(), vWeights.get(i));
 		}
 		initializeWeights(data.getTotalTargets(), wbias);
 		for(int i=0; i<data.getTotalTargets(); i++){
-			wbias.add(Math.random()-0.5);
 			wWeights.add(new ArrayList<Double>());
 			initializeWeights(numNeuronOcultLayer, wWeights.get(i));
 		}
@@ -70,12 +69,18 @@ public class Backpropagation {
 		System.out.println("Starting Training");
 		InputRow inputRow;
 		
-		ArrayList<Double> z_inj = new ArrayList<>();
-		ArrayList<Double> zj = new ArrayList<>();
-		ArrayList<Double> y_ink = new ArrayList<>();
-		ArrayList<Double> yk = new ArrayList<>();
+		ArrayList<Double> z_inj;
+		ArrayList<Double> zj;
+		ArrayList<Double> y_ink;
+		ArrayList<Double> yk;
 		
+		for(int round=0; round<maxTrainingRounds; round++){
 		for (int n = 0; n < trainingData.getRows().size(); n++) {
+			z_inj = new ArrayList<>();
+			zj = new ArrayList<>();
+			y_ink = new ArrayList<>();
+			yk = new ArrayList<>();
+			
 			
 			inputRow = trainingData.getRows().get(n);
 			//para cada linha
@@ -96,7 +101,7 @@ public class Backpropagation {
 			
 			/** 5) RESPUESTA DE LA SALIDA **/
 			//calcular resposta parcial da neurona
-			for(int k=0; k<vWeights.size(); k++){
+			for(int k=0; k<wWeights.size(); k++){
 				y_ink.add(calculatePartialResponse(zj, wWeights.get(k), wbias.get(k)));
 			}
 			
@@ -116,7 +121,7 @@ public class Backpropagation {
 			
 			//COMPROBAR Tk!!!!!
 			for(int k=0; k<yk.size(); k++){
-				errk.add((trainingData.getRows().get(n).get(k)-yk.get(k))*bipolarSigmoidPrima(yk.get(k)));
+				errk.add((inputRow.getBipolarTargetValue(k)-yk.get(k))*bipolarSigmoidPrima(yk.get(k)));
 			}
 			
 			for(int j=0; j<zj.size(); j++){
@@ -137,10 +142,10 @@ public class Backpropagation {
 				errj.add(err_inj.get(j)*bipolarSigmoidPrima(zj.get(j)));
 			}
 			
-			for(int j=0; j<inputRow.getAll().size(); j++){
+			for(int i=0; i<inputRow.getAll().size(); i++){
 				varVij.add(new ArrayList<Double>());
-				for(int k=0; k<errj.size(); k++){
-					varVij.get(j).add(learningRate*errj.get(k)* inputRow.get(j));
+				for(int j=0; j<errj.size(); j++){
+					varVij.get(i).add(learningRate*errj.get(j)* inputRow.get(i));
 				}
 			}
 			for(int j=0; j<errj.size(); j++){
@@ -153,7 +158,7 @@ public class Backpropagation {
 					wWeights.get(j).set(k, wWeights.get(j).get(k)+varWjk.get(j).get(k));
 				}
 			}
-			for(int k=0; k<wbias.size(); k++){
+			for(int k=0; k<wWeights.get(0).size(); k++){
 				wbias.set(k, wbias.get(k)+varWjkBias.get(k));
 			}
 			
@@ -162,52 +167,30 @@ public class Backpropagation {
 					vWeights.get(i).set(j, vWeights.get(i).get(j)+varWjk.get(i).get(j));
 				}
 			}
-			for(int k=0; k<vbias.size(); k++){
+			for(int k=0; k<vWeights.get(0).size(); k++){
 				vbias.set(k, vbias.get(k)+varVijBias.get(k));
 			}
 			
-			
-			//se target diferente de output
-			
-			switch (inputRow.getTargetRepresentation()) {
-			case CLASS_ONE_STRING:
-//				System.out.print(CLASS_ONE + "\t");
-				if (yk.get(0) != CLASS_ONE) {
-					//update pesos
-					trainingErrors++;
-					updateWeights(inputRow, CLASS_ONE);
-				} //else printWeights();
-				break;
-			case CLASS_TWO_STRING:
-//				System.out.print(CLASS_TWO + "\t");
-				if (yk.get(0) != CLASS_TWO) {
-					//update pesos
-					trainingErrors++;
-					updateWeights(inputRow, CLASS_TWO);
-				} //else printWeights();
-				break;
-			default:
-				System.out.print("\nFichero no contiene datos para aprendizaje.\nStoping training...");
-				return;
-			}
-			
-			if (n == trainingData.getRows().size()-1 && hasUpdatedWeights) {
+			/*if (n == trainingData.getRows().size()-1 && hasUpdatedWeights) {
 				if (trainingRounds < maxTrainingRounds) {
 					trainingRounds++;
 					n = -1;
 					hasUpdatedWeights = false;
 				}
-			}
+			}*/
 		}
-		
-		System.out.println("Errores en entrenamiento: " + trainingErrors + ". En " + (trainingRounds+1) + " iteraciones");
+		System.out.println("Errores en entrenamiento: " + trainingErrors + ". En " + (round+1) + " iteraciones");
+		}
 	}
 
 	public double startTest() {
 		System.out.println("\nStarting Test");
 		InputRow inputRow;
-		Double partialResponse;
-		Double neuronOutput;
+		
+		ArrayList<Double> z_inj = new ArrayList<>();
+		ArrayList<Double> zj = new ArrayList<>();
+		ArrayList<Double> y_ink = new ArrayList<>();
+		ArrayList<Double> yk = new ArrayList<>();
 		
 		for (int i = 0; i < testData.getRows().size(); i++) {
 			
@@ -217,35 +200,36 @@ public class Backpropagation {
 				System.out.print(input + "\t");
 			}
 			
+			/** RESPUESTA DE LA CAPA OCULTA **/
+			//calcular resposta parcial da neurona oculta
+			for(int j=0; j<vWeights.size(); j++){
+				z_inj.add(calculatePartialResponse(inputRow.getAll(), vWeights.get(j), vbias.get(j)));
+			}
+			
+			//calcular resposta resposta completa oculta
+			for(Double z_in : z_inj){
+				zj.add(bipolarSigmoid(z_in));
+			}
+			
+			/** RESPUESTA DE LA SALIDA **/
 			//calcular resposta parcial da neurona
-			partialResponse = calculatePartialResponse(inputRow.getAll(), vWeights.get(0), vbias.get(0));
-			//System.out.print(partialResponse + "\t");
+			for(int k=0; k<wWeights.size(); k++){
+				y_ink.add(calculatePartialResponse(zj, wWeights.get(k), wbias.get(k)));
+			}
 			
 			//calcular resposta resposta completa
-			neuronOutput = calculateResponse(partialResponse);
-			
-			if (neuronOutput == CLASS_ONE) {
-				outputData.add(CLASS_ONE_STRING);
-				System.out.print("Classe: predicha " + CLASS_ONE_STRING + 
-						"\treal: " + inputRow.getTargetRepresentation());
-				if (!inputRow.getTargetRepresentation().equals(CLASS_ONE_STRING)) {
-					testErrors++;
-					System.out.print("\tError");
-				}
-			} else if (neuronOutput == CLASS_TWO) {
-				outputData.add(CLASS_TWO_STRING);
-				System.out.print("Classe: predicha " + CLASS_TWO_STRING + 
-						"\treal: " + inputRow.getTargetRepresentation());
-				if (!inputRow.getTargetRepresentation().equals(CLASS_TWO_STRING)) {
-					testErrors++;
-					System.out.print("\tError");
-				}
-			} else {
-				outputData.add(UNDEFINED_STRING);
-				testErrors++;
-				System.out.print("Classe: predicha 0 0\treal: " + inputRow.getTargetRepresentation());
-				System.out.print("\tError");
+			for(Double y : y_ink){
+				yk.add(bipolarSigmoid(y));
 			}
+			
+			/** CLASIFICA SEGUN EL MAXIMO YK **/
+			int outputClass = yk.indexOf(Collections.max(yk));
+			outputData.add(outputClass);
+			System.out.print("Classe: predicha " + outputClass + "\treal: " + inputRow.getTargetClass());
+			if(outputClass!=inputRow.getTargetClass()){
+				testErrors++;
+			}
+			
 			System.out.println("");
 			outputData.newLine();
 		}
@@ -298,8 +282,8 @@ public class Backpropagation {
 	
 	private Double calculatePartialResponse(ArrayList<Double> inputRow, ArrayList<Double> weights, double bias) {
 		Double sum = 0.0;
-		for (Double input : inputRow) {
-			sum += input * weights.get(inputRow.indexOf(input));
+		for (int n=0; n<inputRow.size(); n++) {
+			sum += inputRow.get(n) * weights.get(n);
 		}
 		return bias + sum;
 	}

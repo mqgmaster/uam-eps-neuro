@@ -65,6 +65,8 @@ public class InputData {
 					i++;
 				} else {
 					inputRow.addToTargetRepresentation(input);
+					inputRow.addToTargetClass(input);
+					inputRow.addToBipolarTargetClass(input);
 				}
 			}
 			inputData.add(inputRow);
