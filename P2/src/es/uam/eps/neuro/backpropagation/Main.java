@@ -13,7 +13,7 @@ public class Main {
 				
 		//para probar
 		data = new InputData(FileService.read("data/or.txt"));
-		Backpropagation neural = new Backpropagation(data, 1.0, 1, 2);
+		Backpropagation neural = new Backpropagation(data, 1.0, 1, 5);
 		neural.startTraining();
 		neural.startTest();
 		
