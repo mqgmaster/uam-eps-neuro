@@ -83,9 +83,11 @@ public class Backpropagation {
 		ArrayList<Double> zj;
 		ArrayList<Double> y_ink;
 		ArrayList<Double> yk;
+		double ecm = 0.0;
 		
 		/** 1) MIENTRAS NO SUPERE EL NUMERO DE EPOCAS SE DE LA CONDICION DE PARADA **/
 		for(int round=0; round<maxTrainingRounds; round++){
+			double auxECM = 0.0;
 			/** 2) PARA CADA CONJUNTO DE ENTRENAMIENTO **/
 		for (int r = 0; r < R; r++) {
 			xi = new ArrayList<>();
@@ -120,6 +122,10 @@ public class Backpropagation {
 				}
 				y_ink.add(aux);
 				yk.add(bipolarSigmoid(aux)); //yk = f(y_ink)
+				
+//				int outputClass = yk.indexOf(Collections.max(yk));
+//				auxECM += Math.pow(outputClass-trainingData.getTargetClass(),2);
+				
 			}
 			
 			/** 6) RETROPORGRAMACION DEL ERROR DE LA CAPA SALIDA **/
@@ -157,44 +163,32 @@ public class Backpropagation {
 				errj.add(aux*bipolarSigmoidPrima(zj.get(j)));
 			}
 			
-			/*
-			
-			for(int j=0; j<varWjk.size(); j++){
-				for(int k=0; k<varWjk.get(j).size(); k++){
-					err_inj.add(errk.get(k)*varWjk.get(j).get(k));
-				}
-				errj.add(err_inj.get(j)*bipolarSigmoidPrima(zj.get(j)));
-			}
-			
-			for(int i=0; i<inputRow.getAll().size(); i++){
-				varVij.add(new ArrayList<Double>());
-				for(int j=0; j<errj.size(); j++){
-					varVij.get(i).add(learningRate*errj.get(j)* inputRow.get(i));
+			//deltaVij = learningRate * errj * xi
+			for(int j=0; j<P-1; j++){
+				deltaVij.add(new ArrayList<Double>());
+				double auxCte = learningRate*errj.get(j);
+				deltaVij.get(j).add(auxCte);
+				for(int i=0; i<N; i++){
+					deltaVij.get(j).add(auxCte*xi.get(i));
 				}
 			}
-			for(int j=0; j<errj.size(); j++){
-				varVijBias.add(learningRate*errj.get(j));
-			}
-			*/
+			
 			/** 8) ACTUALIZA PESOS Y SESGO**/
-			/*for(int j=0; j<wWeights.size(); j++){
-				for(int k=0; k<wWeights.get(j).size(); k++){
-					wWeights.get(j).set(k, wWeights.get(j).get(k)+varWjk.get(j).get(k));
+			for(int k=0; k<M; k++){
+				for(int j=0; j<P; j++){
+					double newW = wWeights.get(k).get(j)+deltaWjk.get(k).get(j);
+					wWeights.get(k).set(j, newW);
 				}
-			}
-			for(int k=0; k<wWeights.get(0).size(); k++){
-				wbias.set(k, wbias.get(k)+varWjkBias.get(k));
 			}
 			
-			for(int i=0; i<vWeights.size(); i++){
-				for(int j=0; j<vWeights.get(i).size(); j++){
-					vWeights.get(i).set(j, vWeights.get(i).get(j)+varWjk.get(i).get(j));
+			for(int j=0; j<P-1; j++){
+				for(int i=0; i<N; i++){
+					double newV = vWeights.get(j).get(i)+deltaWjk.get(j).get(i);
+					vWeights.get(j).set(i, newV);
 				}
 			}
-			for(int k=0; k<vWeights.get(0).size(); k++){
-				vbias.set(k, vbias.get(k)+varVijBias.get(k));
-			}
-			*/
+			
+			
 			/*if (n == trainingData.getRows().size()-1 && hasUpdatedWeights) {
 				if (trainingRounds < maxTrainingRounds) {
 					trainingRounds++;
@@ -203,8 +197,10 @@ public class Backpropagation {
 				}
 			}*/
 		}
+//		ecm += auxECM;
 		System.out.println("Errores en entrenamiento: " + trainingErrors + ". En " + (round+1) + " iteraciones");
 		}
+//		ecm = ecm/R;
 	}
 
 	public double startTest() {
