@@ -58,6 +58,21 @@ public class Backpropagation {
 		initializeWeights(M, P, wWeights); // Matrix PxM in ArrayList<ArrayList<Double>> MxP
 
 	}
+	
+	public Backpropagation(InputData data, Double trainingDataPrecentage,
+			double learningRate, int numNeuronHiddenLayer,
+			ArrayList<ArrayList<Double>> wWeights, ArrayList<ArrayList<Double>> vWeights) {
+		setData(data, trainingDataPrecentage);
+		this.learningRate = learningRate;
+
+		R = trainingData.getRows().size();
+		N = trainingData.getTotalInputs() + 1;
+		P = numNeuronHiddenLayer + 1;
+		M = trainingData.getTotalTargets();
+
+		this.wWeights = wWeights;
+		this.vWeights = vWeights;
+	}
 
 	public void setData(InputData data, Double trainingDataPercentage) {
 		ArrayList<InputData> allData = data.getData(trainingDataPercentage);
@@ -111,8 +126,7 @@ public class Backpropagation {
 					// z_inj = v0j + SUMi->N(xi*vij)
 					double aux = vWeights.get(j).get(0); // v0j
 					for (int i = 1; i < N; i++) {
-						aux += xi.get(i) * vWeights.get(j).get(i); // + (xi *
-																	// vij)
+						aux += xi.get(i) * vWeights.get(j).get(i); // + (xi * vij)
 					}
 					z_inj.add(aux);
 					zj.add(bipolarSigmoid(aux)); // zj = f(z_inj)
@@ -123,8 +137,7 @@ public class Backpropagation {
 					// y_ink = w0j + SUMj->P(zj*wjk)
 					double aux = 0.0;
 					for (int j = 0; j < P; j++) {
-						aux += zj.get(j) * wWeights.get(k).get(j); // + (zj *
-																	// wjk)
+						aux += zj.get(j) * wWeights.get(k).get(j); // + (zj * wjk)
 					}
 					y_ink.add(aux);
 					yk.add(bipolarSigmoid(aux)); // yk = f(y_ink)
@@ -137,8 +150,6 @@ public class Backpropagation {
 				ArrayList<Double> errk = new ArrayList<>();
 				ArrayList<Double> err_inj = new ArrayList<>();
 				ArrayList<Double> errj = new ArrayList<>();
-				// ArrayList<Double> varWjkBias = new ArrayList<>();
-				// ArrayList<Double> varVijBias = new ArrayList<>();
 				ArrayList<ArrayList<Double>> deltaWjk = new ArrayList<>();
 				ArrayList<ArrayList<Double>> deltaVij = new ArrayList<>();
 
@@ -199,7 +210,7 @@ public class Backpropagation {
 			double ecm = auxECM/R;
 			outputECM.add(ecm);
 			outputECM.newLine();
-			System.out.println("Errores en entrenamiento ECM: " + ecm + ". En " + (round+1) + " iteraciones");
+//			System.out.println("Errores en entrenamiento ECM: " + ecm + ". En " + (round+1) + " iteraciones");
 			if(ecm<=ECM){
 				break;
 			}
@@ -257,7 +268,7 @@ public class Backpropagation {
 			/** CLASIFICA SEGUN EL MAXIMO YK **/
 			int outputClass = yk.indexOf(Collections.max(yk));
 			outputData.add(outputClass);
-			System.out.print("Classe: predicha " + outputClass + "\treal: "
+			System.out.print("Clase: predicha " + outputClass + "\treal: "
 					+ inputRow.getTargetClass());
 			if (outputClass != inputRow.getTargetClass()) {
 				testErrors++;
@@ -267,8 +278,7 @@ public class Backpropagation {
 			outputData.newLine();
 		}
 
-		System.out
-				.println("Errores en test: " + testErrors + ". "
+		System.out.println("Errores en test: " + testErrors + ". "
 						+ ((double) testErrors / testData.getRows().size())
 						* 100 + "%");
 		return ((double) testErrors / testData.getRows().size()) * 100;
@@ -326,7 +336,11 @@ public class Backpropagation {
 		return bias + sum;
 	}
 
-	public ArrayList<ArrayList<Double>> getWWeights() {
+	public ArrayList<ArrayList<Double>> getvWeights() {
+		return vWeights;
+	}
+
+	public ArrayList<ArrayList<Double>> getwWeights() {
 		return wWeights;
 	}
 
