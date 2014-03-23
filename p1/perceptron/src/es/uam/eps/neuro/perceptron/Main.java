@@ -11,59 +11,26 @@ public class Main {
 	public static void main(String[] args) throws IOException {
 		InputData data;
 		//para crear el archivo shuffled
-		//data = new InputData(FileService.read("../problema_real1.txt"));
-		//FileService.save("../shu_problema_real1.txt", data.shuffleFileLines());
+		//data = new InputData(FileService.read("../datos.txt"));
+		//FileService.save("../datosaleatorios.txt", data.shuffleFileLines());
 		
 		///para probar
-//		data = new InputData(FileService.read("../shu_problema_real2.txt"));
+//		data = new InputData(FileService.read("../datosaleatorios.txt"));
 //		Perceptron neuron = new Perceptron(data, 2.0/3.0, 1);
 //		neuron.startTraining();
 		
 		//para cambiar los datos de la neurona sin cambiar pesos
-//		InputData newdata = new InputData(FileService.read("../shu_problema_real2_no_etiquetados.txt"));
+//		InputData newdata = new InputData(FileService.read("../datosaleatorios2.txt"));
 //		neuron.setData(newdata, 1.0);
 //		neuron.startTest();
 		
 		//para grabar en fichero la salida de la neurona
-		//FileService.save("../res_shu_problema_real2_ada.txt", neuron.getOutputData().getFileLines());
-		
-				
-		/* APARTADO 3 */
-		
-		data = new InputData(FileService.read("../shu_problema_real2.txt"));
-		Perceptron p;
-		Adaline a;
-		int i=0;
-		double numE=Math.pow(2, i);
-		ArrayList<String> resultsP = new ArrayList<>();
-		ArrayList<String> resultsA = new ArrayList<>();
-		while(numE<=1000){
-			p = new Perceptron(data, 2.0/3.0, (int)numE);
-			p.startTraining();
-			resultsP.add(numE+"\t"+Double.toString(p.startTest()));
-
-			a = new Adaline(data, 2.0/3.0, (int)numE);
-			a.startTraining();
-			resultsA.add(numE+"\t"+Double.toString(a.startTest()));
-			
-			i++;
-			numE = Math.pow(2, i);
-		}
-		FileService.save("../p_results_10_pr2.txt", resultsP);
-		FileService.save("../a_results_10_pr2.txt", resultsA);
+		//FileService.save("../resultados.txt", neuron.getOutputData().getFileLines());
 		
 		
-		/* APARTADO 4 */
-		//data = new InputData(FileService.read("../nand2.txt"));
-		/*Perceptron neuronP = new Perceptron(data, 1.0, 1000);
-		neuronP.startTraining();
-		neuronP.startTest(null);
-		*/
-		/*Adaline neuronA = new Adaline(data, 1.0, 1000);
-		neuronA.startTraining();
-		neuronA.startTest(null);
-		*/
-		
+	}
+	
+	private static void part5() {
 		/* APARTADO 5 */
 		//Mezclamos los datos de entrenamiento
 		/*data = new InputData(FileService.read("../problema_real2_2.txt"));
@@ -112,6 +79,46 @@ public class Main {
 		FileService.save("../p_results02_01.txt", resultsPer);
 		FileService.save("../a_results00_01.txt", resultsAda);
 		*/
+	}
+	
+	private static void part4() {
+		/* APARTADO 4 */
+		//data = new InputData(FileService.read("../nand2.txt"));
+		/*Perceptron neuronP = new Perceptron(data, 1.0, 1000);
+		neuronP.startTraining();
+		neuronP.startTest(null);
+		*/
+		/*Adaline neuronA = new Adaline(data, 1.0, 1000);
+		neuronA.startTraining();
+		neuronA.startTest(null);
+		*/
+	}
+
+	private static void part3() {
+		InputData data;
+		/* APARTADO 3 */
+		
+		data = new InputData(FileService.read("../shu_problema_real2.txt"));
+		Perceptron p;
+		Adaline a;
+		int i=0;
+		double numE=Math.pow(2, i);
+		ArrayList<String> resultsP = new ArrayList<>();
+		ArrayList<String> resultsA = new ArrayList<>();
+		while(numE<=1000){
+			p = new Perceptron(data, 2.0/3.0, (int)numE);
+			p.startTraining();
+			resultsP.add(numE+"\t"+Double.toString(p.startTest()));
+
+			a = new Adaline(data, 2.0/3.0, (int)numE);
+			a.startTraining();
+			resultsA.add(numE+"\t"+Double.toString(a.startTest()));
+			
+			i++;
+			numE = Math.pow(2, i);
+		}
+		FileService.save("../p_results_10_pr2.txt", resultsP);
+		FileService.save("../a_results_10_pr2.txt", resultsA);
 	}
 
 }
