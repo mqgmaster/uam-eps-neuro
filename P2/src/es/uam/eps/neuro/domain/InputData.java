@@ -73,6 +73,31 @@ public class InputData {
 		}
 	}
 	
+	public void normalize() {
+		Integer standardDeviation;
+		ArrayList<Double> inputMean = calculateMean();
+		for(InputRow row : inputData) {
+			
+		}
+	}
+	
+	//private Double calculeStandardDeviation() {
+	//	
+	//}
+	
+	private ArrayList<Double> calculateMean() {
+		ArrayList<Double> allMeans = new ArrayList<>(); 
+		for(InputRow row : inputData) {
+			for (int i = 0; i < row.getAll().size(); i++) {
+				allMeans.set(i, allMeans.get(i) + row.get(i));
+			}
+		}
+		for (Double sum : allMeans) {
+			sum = sum / inputData.size();
+		}
+		return allMeans;
+	}
+	
 	public ArrayList<InputData> getData(Double firstPartitionPercentage) {
 		prepareRows();
 		int firstPartitionFinalIndex = (int) (firstPartitionPercentage * inputData.size());
