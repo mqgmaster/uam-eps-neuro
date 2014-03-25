@@ -12,6 +12,7 @@ public class InputData {
 	private ArrayList<String> fileLines;
 	//Array de Array de entradas
 	private List<InputRow> inputData = new ArrayList<>();
+	private boolean shuffled = false;
 	
 	public InputData(ArrayList<String> fileLines) {
 		this.fileLines = fileLines;
@@ -38,12 +39,20 @@ public class InputData {
 	}
 	
 	public List<InputRow> getRows() {
+		if (inputData.isEmpty()) {
+			prepareRows();
+		}
 		return inputData;
 	}
 	
 	public ArrayList<String> shuffleFileLines() {
+		if (fileLines.isEmpty()) {
+			System.out.println("filelines is empty");
+			return null;
+		}
 		try {
 			Collections.shuffle(fileLines);
+			shuffled = true;
 			//first line params
 			fileLines.add(0, params);
 		} catch (Exception e) {
@@ -53,6 +62,13 @@ public class InputData {
 	}
 	
 	private void prepareRows() {
+		if (fileLines.isEmpty()) {
+			System.out.println("filelines is empty");
+			return;
+		}
+		if (shuffled) {
+			fileLines.remove(0);
+		}
 		for (String inputs : fileLines) {
 			InputRow inputRow = new InputRow();
 			//remove duplicate spaces. Eso es un overhead. El archivo de entrada
@@ -74,32 +90,56 @@ public class InputData {
 	}
 	
 	public void normalize() {
-		Integer standardDeviation;
-		ArrayList<Double> inputMean = calculateMean();
+		normalizeBasedOn(this);
+	}
+	
+	public void normalizeBasedOn(InputData data) {
+		ArrayList<Double> allMeans = data.calculateMean();
+		ArrayList<Double> allStandardDeviations = data.calculateStandardDeviation(allMeans);
 		for(InputRow row : inputData) {
-			
+			for (int i = 0; i < totalInputs; i++) {
+				row.getAll().set(i, (row.get(i) - allMeans.get(i)) / allStandardDeviations.get(i));
+				System.out.println(row.get(i));
+			}
 		}
 	}
 	
-	//private Double calculeStandardDeviation() {
-	//	
-	//}
-	
-	private ArrayList<Double> calculateMean() {
-		ArrayList<Double> allMeans = new ArrayList<>(); 
+	public ArrayList<Double> calculateStandardDeviation(ArrayList<Double> allMeans) {
+		ArrayList<Double> allStandardDeviations = new ArrayList<>(Collections.nCopies(totalInputs, 0.0));
+		
 		for(InputRow row : inputData) {
-			for (int i = 0; i < row.getAll().size(); i++) {
+			for (int i = 0; i < totalInputs; i++) {
+				//System.out.println(row.get(i) + " - " + allMeans.get(i) + " ²");
+				allStandardDeviations.set(i, 
+					allStandardDeviations.get(i) + Math.pow(row.get(i) - allMeans.get(i), 2));
+			}
+		}
+		for(Double standardDeviation : allStandardDeviations) {
+			standardDeviation = Math.sqrt(standardDeviation / (inputData.size() - 1));
+			System.out.println(standardDeviation);
+		}
+		
+		return allStandardDeviations;
+	}
+	
+	public ArrayList<Double> calculateMean() {
+		ArrayList<Double> allMeans = new ArrayList<>(Collections.nCopies(totalInputs, 0.0));
+		for(InputRow row : inputData) {
+			for (int i = 0; i < totalInputs; i++) {
 				allMeans.set(i, allMeans.get(i) + row.get(i));
 			}
 		}
-		for (Double sum : allMeans) {
-			sum = sum / inputData.size();
+		for (int i = 0; i < totalInputs; i++) {
+			allMeans.set(i, allMeans.get(i) / inputData.size());
+			System.out.println(allMeans.get(i));
 		}
 		return allMeans;
 	}
 	
 	public ArrayList<InputData> getData(Double firstPartitionPercentage) {
-		prepareRows();
+		if (inputData.isEmpty()) {
+			prepareRows();
+		}
 		int firstPartitionFinalIndex = (int) (firstPartitionPercentage * inputData.size());
 		int secondPartitionStartIndex;
 		if (firstPartitionPercentage == 1.0) {

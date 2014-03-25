@@ -8,7 +8,8 @@ public class Main {
 	public static void main(String[] args) {
 		InputData data;
 		//para crear el archivo shuffled
-		//data = new InputData(FileService.read("../problema_real1.txt"));
+		data = new InputData(FileService.read("data/test.txt"));
+		data.getRows();
 		//FileService.save("../shu_problema_real1.txt", data.shuffleFileLines());
 				
 		//para probar
@@ -34,7 +35,8 @@ public class Main {
 		
 		//part4();
 		
-		part6();
+		data.normalizeBasedOn(data);
+		//data.normalize();
 	}
 	
 	//Tarea 2: chequeo del funcionamiento de la red con los ficheros de 
