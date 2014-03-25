@@ -9,7 +9,6 @@ public class Main {
 		InputData data;
 		//para crear el archivo shuffled
 		data = new InputData(FileService.read("data/test.txt"));
-		data.getRows();
 		//FileService.save("../shu_problema_real1.txt", data.shuffleFileLines());
 				
 		//para probar

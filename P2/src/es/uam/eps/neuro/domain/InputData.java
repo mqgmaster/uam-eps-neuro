@@ -94,6 +94,9 @@ public class InputData {
 	}
 	
 	public void normalizeBasedOn(InputData data) {
+		if (inputData.isEmpty()) {
+			prepareRows();
+		}
 		ArrayList<Double> allMeans = data.calculateMean();
 		ArrayList<Double> allStandardDeviations = data.calculateStandardDeviation(allMeans);
 		for(InputRow row : inputData) {
