@@ -267,7 +267,12 @@ public class Backpropagation {
 
 			/** CLASIFICA SEGUN EL MAXIMO YK **/
 			int outputClass = yk.indexOf(Collections.max(yk));
-			outputData.add(outputClass);
+			for(int i=0; i<testData.getTotalTargets(); i++){
+				if(i==outputClass)
+					outputData.add(1);
+				else
+					outputData.add(0);
+			}
 			System.out.print("Clase: predicha " + outputClass + "\treal: "
 					+ inputRow.getTargetClass());
 			if (outputClass != inputRow.getTargetClass()) {
@@ -350,6 +355,22 @@ public class Backpropagation {
 
 	public OutputData getOutputECM() {
 		return outputECM;
+	}
+
+	public InputData getTestData() {
+		return testData;
+	}
+
+	public void setTestData(InputData testData) {
+		this.testData = testData;
+	}
+
+	public InputData getTrainingData() {
+		return trainingData;
+	}
+
+	public void setTrainingData(InputData trainingData) {
+		this.trainingData = trainingData;
 	}
 	
 	

@@ -1,5 +1,7 @@
 package es.uam.eps.neuro.backpropagation;
 
+import java.util.Collections;
+
 import es.uam.eps.neuro.domain.InputData;
 import es.uam.eps.neuro.service.FileService;
 
@@ -8,13 +10,13 @@ public class Main {
 	public static void main(String[] args) {
 		InputData data;
 		//para crear el archivo shuffled
-		data = new InputData(FileService.read("data/test.txt"));
+		//data = new InputData(FileService.read("data/test.txt"));
 		//FileService.save("../shu_problema_real1.txt", data.shuffleFileLines());
 				
 		//para probar
 		/*
 		data = new InputData(FileService.read("data/xor.txt"));
-		Backpropagation neural = new Backpropagation(data, 1.0, 0.2, 4);
+		Backpropagation neural = new Backpropagation(data, 1.0, 0.1, 2);
 		neural.startTraining();
 		FileService.save("data/results/ECM/xor.txt", neural.getOutputECM().getFileLines());
 		neural.startTest();
@@ -34,7 +36,8 @@ public class Main {
 		
 		//part4();
 		
-		data.normalizeBasedOn(data);
+		part5();
+		
 		//data.normalize();
 	}
 	
@@ -53,7 +56,7 @@ public class Main {
 		FileService.save("output/nor0.2_2.txt", neural.getOutputData().getFileLines());
 		FileService.save("output/ECM/EMC_nor0.2_2.txt", neural.getOutputECM().getFileLines());
 		
-		neural = new Backpropagation(data, 1.0, 0.5, 4);
+		neural = new Backpropagation(data, 1.0, 0.1, 4);
 		neural.startTraining();
 		neural.startTest();
 		FileService.save("output/nor0.5_4.txt", neural.getOutputData().getFileLines());
@@ -68,7 +71,7 @@ public class Main {
 		FileService.save("output/nand0.2_2.txt", neural.getOutputData().getFileLines());
 		FileService.save("output/ECM/EMC_nand0.2_2.txt", neural.getOutputECM().getFileLines());
 		
-		neural = new Backpropagation(data, 1.0, 0.5, 4);
+		neural = new Backpropagation(data, 1.0, 0.1, 4);
 		neural.startTraining();
 		neural.startTest();
 		FileService.save("output/nand0.5_4.txt", neural.getOutputData().getFileLines());
@@ -83,7 +86,7 @@ public class Main {
 		FileService.save("output/xor0.2_2.txt", neural.getOutputData().getFileLines());
 		FileService.save("output/ECM/EMC_xor0.2_2.txt", neural.getOutputECM().getFileLines());
 		
-		neural = new Backpropagation(data, 1.0, 0.5, 4);
+		neural = new Backpropagation(data, 1.0, 0.1, 4);
 		neural.startTraining();
 		neural.startTest();
 		FileService.save("output/xor0.5_4.txt", neural.getOutputData().getFileLines());
@@ -98,7 +101,7 @@ public class Main {
 		FileService.save("output/problema_real1_0.2_2.txt", neural.getOutputData().getFileLines());
 		FileService.save("output/ECM/EMC_problema_real1_0.2_2.txt", neural.getOutputECM().getFileLines());
 		
-		neural = new Backpropagation(data, 2.0/3.0, 0.5, 4);
+		neural = new Backpropagation(data, 2.0/3.0, 0.1, 4);
 		neural.startTraining();
 		neural.startTest();
 		FileService.save("output/problema_real1_0.5_4.txt", neural.getOutputData().getFileLines());
@@ -113,7 +116,7 @@ public class Main {
 		FileService.save("output/problema_real2_0.2_2.txt", neural.getOutputData().getFileLines());
 		FileService.save("output/ECM/EMC_problema_real2_0.2_2.txt", neural.getOutputECM().getFileLines());
 		
-		neural = new Backpropagation(data, 2.0/3.0, 0.5, 4);
+		neural = new Backpropagation(data, 2.0/3.0, 0.1, 4);
 		neural.startTraining();
 		neural.startTest();
 		FileService.save("output/problema_real2_0.5_4.txt", neural.getOutputData().getFileLines());
@@ -129,7 +132,7 @@ public class Main {
 		//problema_real_3clases
 		data = new InputData(FileService.read("data/problema-real-3clases.txt"));
 		
-		FileService.save("shuffled/problema_real_3clases.txt", data.shuffleFileLines());
+		//FileService.save("shuffled/problema_real_3clases.txt", data.shuffleFileLines());
 		data = new InputData(FileService.read("shuffled/problema_real_3clases.txt"));
 		
 		neural = new Backpropagation(data, 2.0/3.0, 0.2, 2);
@@ -138,7 +141,13 @@ public class Main {
 		FileService.save("output/problema_real_3clases_0.2_2.txt", neural.getOutputData().getFileLines());
 		FileService.save("output/ECM/problema_real_3clases_0.2_2.txt", neural.getOutputECM().getFileLines());
 		
-		neural = new Backpropagation(data, 2.0/3.0, 0.5, 4);
+		neural = new Backpropagation(data, 2.0/3.0, 0.1, 4);
+		neural.startTraining();
+		neural.startTest();
+		FileService.save("output/problema_real_3clases_0.5_4.txt", neural.getOutputData().getFileLines());
+		FileService.save("output/ECM/problema_real_3clases_0.5_4.txt", neural.getOutputECM().getFileLines());
+		
+		neural = new Backpropagation(data, 2.0/3.0, 0.1, 3);
 		neural.startTraining();
 		neural.startTest();
 		FileService.save("output/problema_real_3clases_0.5_4.txt", neural.getOutputData().getFileLines());
@@ -152,9 +161,9 @@ public class Main {
 		Backpropagation neural;
 		
 		//problema_real4.txt
-		data = new InputData(FileService.read("data/problema-real4.txt"));
+		//data = new InputData(FileService.read("data/problema-real4.txt"));
 
-		FileService.save("shuffled/problema_real_4.txt", data.shuffleFileLines());
+		//FileService.save("shuffled/problema_real_4.txt", data.shuffleFileLines());
 		data = new InputData(FileService.read("shuffled/problema_real_4.txt"));
 		
 		neural = new Backpropagation(data, 2.0/3.0, 0.2, 2);
@@ -174,6 +183,32 @@ public class Main {
 	//Tarea 5: normalización de los datos.
 	private static void part5() {
 		
+		InputData data;
+		Backpropagation neural;
+		
+		//problema_real4.txt
+		//data = new InputData(FileService.read("data/problema-real4.txt"));
+
+		//FileService.save("shuffled/problema_real_4.txt", data.shuffleFileLines());
+		data = new InputData(FileService.read("shuffled/problema_real_4.txt"));
+				
+		neural = new Backpropagation(data, 2.0/3.0, 0.2, 2);
+		neural.getTestData().normalizeBasedOn(neural.getTrainingData());
+		neural.getTrainingData().normalize();
+		neural.startTraining();
+		neural.startTest();
+		
+		FileService.save("output/problema_real4_0.2_2.txt", neural.getOutputData().getFileLines());
+		FileService.save("output/ECM/problema_real4_0.2_2.txt", neural.getOutputECM().getFileLines());
+		
+		neural = new Backpropagation(data, 2.0/3.0, 0.5, 4);
+		neural.getTestData().normalizeBasedOn(neural.getTrainingData());
+		neural.getTrainingData().normalize();
+		neural.startTraining();
+		neural.startTest();
+		FileService.save("output/problema_real4_0.5_4.txt", neural.getOutputData().getFileLines());
+		FileService.save("output/ECM/problema_real4_0.5_4.txt", neural.getOutputECM().getFileLines());
+
 	}
 	
 	//Tarea 6: predicción de datos no etiquetados.
