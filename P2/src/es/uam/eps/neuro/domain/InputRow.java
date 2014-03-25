@@ -58,8 +58,7 @@ public class InputRow {
 	
 	public void print() {
 		for (Double input : inputs) {
-			System.out.print(input);
-			System.out.print(" ");
+			System.out.print(input + " ");
 		}
 	}
 }

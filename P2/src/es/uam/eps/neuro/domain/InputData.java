@@ -102,7 +102,7 @@ public class InputData {
 		for(InputRow row : inputData) {
 			for (int i = 0; i < totalInputs; i++) {
 				row.getAll().set(i, (row.get(i) - allMeans.get(i)) / allStandardDeviations.get(i));
-				System.out.println(row.get(i));
+				//System.out.println(row.get(i));
 			}
 		}
 	}
@@ -117,9 +117,10 @@ public class InputData {
 					allStandardDeviations.get(i) + Math.pow(row.get(i) - allMeans.get(i), 2));
 			}
 		}
-		for(Double standardDeviation : allStandardDeviations) {
-			standardDeviation = Math.sqrt(standardDeviation / (inputData.size() - 1));
-			System.out.println(standardDeviation);
+		for (int i = 0; i < totalInputs; i++) {
+			allStandardDeviations.set(i, 
+				Math.sqrt(allStandardDeviations.get(i) / (inputData.size() - 1)));
+			//System.out.println(allStandardDeviations.get(i));
 		}
 		
 		return allStandardDeviations;
@@ -134,7 +135,7 @@ public class InputData {
 		}
 		for (int i = 0; i < totalInputs; i++) {
 			allMeans.set(i, allMeans.get(i) / inputData.size());
-			System.out.println(allMeans.get(i));
+			//System.out.println(allMeans.get(i));
 		}
 		return allMeans;
 	}
@@ -163,6 +164,13 @@ public class InputData {
 		dividedData.add(firstPart);
 		dividedData.add(secondPart);
 		return dividedData;
+	}
+	
+	public void print() {
+		for (InputRow row : inputData) {
+			row.print();
+			System.out.println("");
+		}
 	}
 }
 

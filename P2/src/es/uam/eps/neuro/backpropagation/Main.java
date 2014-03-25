@@ -1,7 +1,5 @@
 package es.uam.eps.neuro.backpropagation;
 
-import java.util.Collections;
-
 import es.uam.eps.neuro.domain.InputData;
 import es.uam.eps.neuro.service.FileService;
 
@@ -10,7 +8,7 @@ public class Main {
 	public static void main(String[] args) {
 		InputData data;
 		//para crear el archivo shuffled
-		//data = new InputData(FileService.read("data/test.txt"));
+		//data = new InputData(FileService.read("data/problema-real4.txt"));
 		//FileService.save("../shu_problema_real1.txt", data.shuffleFileLines());
 				
 		//para probar
@@ -36,9 +34,8 @@ public class Main {
 		
 		//part4();
 		
-		part5();
+		//part5();
 		
-		//data.normalize();
 	}
 	
 	//Tarea 2: chequeo del funcionamiento de la red con los ficheros de 
