@@ -12,14 +12,14 @@ public class Main {
 		//FileService.save("../shu_problema_real1.txt", data.shuffleFileLines());
 				
 		//para probar
-		/*
+		
 		data = new InputData(FileService.read("data/xor.txt"));
-		Backpropagation neural = new Backpropagation(data, 1.0, 0.1, 2);
+		Backpropagation neural = new Backpropagation(data, 1.0, 0.1, 20);
 		neural.startTraining();
 		FileService.save("data/results/ECM/xor.txt", neural.getOutputECM().getFileLines());
 		neural.startTest();
 		FileService.save("data/results/xor.txt", neural.getOutputData().getFileLines());
-		*/
+		
 		
 		//para cambiar los datos de la neurona sin cambiar pesos
 //		InputData newdata = new InputData(FileService.read("../shu_problema_real2_no_etiquetados.txt"));
@@ -35,6 +35,8 @@ public class Main {
 		//part4();
 		
 		//part5();
+		
+		//part6();
 		
 	}
 	

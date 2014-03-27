@@ -12,6 +12,7 @@ public class Backpropagation {
 	public static final Double THRESHOLD = 0.2; // umbral
 	public static final Integer MAX_ROUNDS = 1000;
 	public static final Double ECM = 0.1;
+	public static final Double ECM_DIFF = 0.000001;
 
 	// definiciones respeto al fichero de entrada
 	public static final Double CLASS_ONE = 1.0;
@@ -86,6 +87,7 @@ public class Backpropagation {
 			ArrayList<Double> aux = new ArrayList<>();
 			for (int j = 0; j < columns; j++) {
 				aux.add(Math.random() - 0.5);
+//				aux.add(0.5);
 			}
 			weights.add(aux);
 		}
@@ -100,10 +102,10 @@ public class Backpropagation {
 		ArrayList<Double> y_ink;
 		ArrayList<Double> yk;
 		
+		double prevECM = 10.0;
 
 		/**
-		 * 1) MIENTRAS NO SUPERE EL NUMERO DE EPOCAS SE DE LA CONDICION DE
-		 * PARADA
+		 * 1) MIENTRAS NO SUPERE EL NUMERO DE EPOCAS SE DE LA CONDICION DE PARADA
 		 **/
 		for (int round = 0; round < maxTrainingRounds; round++) {
 			double auxECM = 0.0;
@@ -171,20 +173,20 @@ public class Backpropagation {
 
 				/** 7) RETROPORGRAMACION DEL ERROR DE LA CAPA OCULTA **/
 				// err_inj = SUMk->M(errk*wjk)
-				for (int j = 0; j < P; j++) {
+				for (int j = 1; j < P; j++) {
 					double aux = 0.0;
 					for (int k = 0; k < M; k++) {
 						aux += errk.get(k) * wWeights.get(k).get(j);
 					}
 					err_inj.add(aux);
-					errj.add(aux * bipolarSigmoidPrima(zj.get(j)));
+					errj.add(bipolarSigmoidPrima(zj.get(j))*aux);
 				}
 
 				// deltaVij = learningRate * errj * xi
 				for (int j = 0; j < P - 1; j++) {
 					deltaVij.add(new ArrayList<Double>());
 					double auxCte = learningRate * errj.get(j);
-					deltaVij.get(j).add(auxCte);
+					//deltaVij.get(j).add(auxCte);
 					for (int i = 0; i < N; i++) {
 						deltaVij.get(j).add(auxCte * xi.get(i));
 					}
@@ -209,11 +211,13 @@ public class Backpropagation {
 			}
 			double ecm = auxECM/R;
 			outputECM.add(ecm);
+			outputECM.add(prevECM-ecm);
 			outputECM.newLine();
-//			System.out.println("Errores en entrenamiento ECM: " + ecm + ". En " + (round+1) + " iteraciones");
-			if(ecm<=ECM){
+//			System.out.println("Errores en entrenamiento ECM: " + ecm + ". Diff"+(prevECM-ecm)+" En " + (round+1) + " iteraciones");
+			if(ecm<=ECM || prevECM-ecm<ECM_DIFF){
 				break;
 			}
+			prevECM = ecm;
 		}
 	}
 
