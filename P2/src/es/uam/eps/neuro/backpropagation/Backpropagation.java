@@ -37,11 +37,8 @@ public class Backpropagation {
 	private InputData testData;
 	private OutputData outputData = new OutputData();
 	private OutputData outputECM = new OutputData();
-	private boolean hasUpdatedWeights = false;
 
 	private int maxTrainingRounds = MAX_ROUNDS; // maximo de rondas de entrenamiento
-	private int trainingRounds = 0;
-	private int trainingErrors = 0;
 	private int testErrors = 0;
 
 	public Backpropagation(InputData data, Double trainingDataPrecentage,
@@ -211,7 +208,7 @@ public class Backpropagation {
 			}
 			double ecm = auxECM/R;
 			outputECM.add(ecm);
-			outputECM.add(prevECM-ecm);
+//			outputECM.add(prevECM-ecm);
 			outputECM.newLine();
 //			System.out.println("Errores en entrenamiento ECM: " + ecm + ". Diff"+(prevECM-ecm)+" En " + (round+1) + " iteraciones");
 			if(ecm<=ECM || prevECM-ecm<ECM_DIFF){
@@ -302,29 +299,6 @@ public class Backpropagation {
 		System.out.println("-\t");
 	}
 
-	private void updateWeights(InputRow inputRow, Double target) {
-		if (!hasUpdatedWeights) {
-			hasUpdatedWeights = true;
-		}
-		for (int i = 0; i < wWeights.size(); i++) {
-			// System.out.print(inputWeights.get(i) + "\t");
-			// wWeights.set(i, wWeights.get(i) + (learningRate * target *
-			// inputRow.get(i)));
-			// System.out.print(inputWeights.get(i) + "\t");
-		}
-		// System.out.print(bias + "\t");
-		// wbias += learningRate * target;
-		// System.out.println(bias + "\t");
-	}
-
-	private Double calculateResponse(Double partialResponse) {
-		if (partialResponse > THRESHOLD) {
-			return CLASS_ONE;
-		} else if (partialResponse < -THRESHOLD) {
-			return CLASS_TWO;
-		}
-		return UNDEFINED;
-	}
 
 	private Double bipolarSigmoid(Double partialResponse) {
 		double r = (2 / (1 + Math.exp(-partialResponse))) - 1;
@@ -334,15 +308,6 @@ public class Backpropagation {
 	private Double bipolarSigmoidPrima(Double bipolarSigmoid) {
 		double r = (1 + bipolarSigmoid) * (1 - bipolarSigmoid) * 0.5;
 		return r;
-	}
-
-	private Double calculatePartialResponse(ArrayList<Double> inputRow,
-			ArrayList<Double> weights, double bias) {
-		Double sum = 0.0;
-		for (int n = 0; n < inputRow.size(); n++) {
-			sum += inputRow.get(n) * weights.get(n);
-		}
-		return bias + sum;
 	}
 
 	public ArrayList<ArrayList<Double>> getvWeights() {
