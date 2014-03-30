@@ -199,14 +199,14 @@ public class Main {
 		
 		data = new InputData(FileService.read("data/problema_real2.txt"));
 		
-		neural = new Backpropagation(data, 1.0, 0.2, 4);
+		neural = new Backpropagation(data, 1.0, 0.2, 2);
 		neural.startTraining();
 		//FileService.save("part6/problema_real2_0.2_2.txt", neural.getOutputECM().getFileLines());
 		
 		//problema_real2_no_etiquetados.txt
 		data = new InputData(FileService.read("data/problema_real2_no_etiquetados.txt"));
 		
-		neural = new Backpropagation(data, 1.0, 0.2, 4, neural.getwWeights(), neural.getvWeights());
+		neural = new Backpropagation(data, 1.0, 0.2, 2, neural.getwWeights(), neural.getvWeights());
 		neural.startTest();
 		FileService.save("part6/predicciones_nnet.txt", neural.getOutputData().getFileLines());
 	}
