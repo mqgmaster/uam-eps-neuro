@@ -39,6 +39,14 @@ public class Main {
 		
 		//part6();
 		Autoencoder.construye_bd_autoencoder(3, "patrones3.txt");
+/*		
+		data = new InputData(FileService.read("patrones3.txt"));
+		Backpropagation neural = new Backpropagation(data, 1.0, 0.1, 4);
+		neural.startTraining();
+//		FileService.save("data/results/ECM/xor.txt", neural.getOutputECM().getFileLines());
+		neural.startTest();
+//		FileService.save("data/results/xor.txt", neural.getOutputData().getFileLines());
+	*/	
 	}
 	
 	//Tarea 2: chequeo del funcionamiento de la red con los ficheros de 

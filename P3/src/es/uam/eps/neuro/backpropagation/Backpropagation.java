@@ -142,7 +142,8 @@ public class Backpropagation {
 					yk.add(bipolarSigmoid(aux)); // yk = f(y_ink)
 
 					auxECM += Math.pow(yk.get(k)-inputRow.getTargetValue(k),2);
-
+/** CALCULAR ERROR DE RECONSTRUCCION*/
+					
 				}
 
 				/** 6) RETROPORGRAMACION DEL ERROR DE LA CAPA SALIDA **/
@@ -210,7 +211,7 @@ public class Backpropagation {
 			outputECM.add(ecm);
 //			outputECM.add(prevECM-ecm);
 			outputECM.newLine();
-//			System.out.println("Errores en entrenamiento ECM: " + ecm + ". Diff"+(prevECM-ecm)+" En " + (round+1) + " iteraciones");
+			System.out.println("Errores en entrenamiento ECM: " + ecm + ". Diff"+(prevECM-ecm)+" En " + (round+1) + " iteraciones");
 			if(ecm<=ECM || prevECM-ecm<ECM_DIFF){
 				break;
 			}
@@ -226,6 +227,7 @@ public class Backpropagation {
 		ArrayList<Double> zj = new ArrayList<>();
 		ArrayList<Double> y_ink = new ArrayList<>();
 		ArrayList<Double> yk = new ArrayList<>();
+		ArrayList<Double> output = new ArrayList<>();
 
 		for (int r = 0; r < testData.getRows().size(); r++) {
 			xi = new ArrayList<>();
@@ -267,6 +269,23 @@ public class Backpropagation {
 			}
 
 			/** CLASIFICA SEGUN EL MAXIMO YK **/
+			for(int i=0; i<output.size(); i++){
+				if(yk.get(i)<0){
+					output.add(-0.9);
+					outputData.add(-0.9);
+				}else{
+					output.add(0.9);
+					outputData.add(0.9);
+				}
+				
+				if(output.get(i)!=inputRow.getAutoencoderTargetClass().get(i)){
+					testErrors++;
+				}
+				System.out.print("Clase: predicha " + output.get(i) + "\treal: "
+						+ inputRow.getAutoencoderTargetClass().get(i));
+			}
+			outputData.newLine();
+			/*
 			int outputClass = yk.indexOf(Collections.max(yk));
 			for(int i=0; i<testData.getTotalTargets(); i++){
 				if(i==outputClass)
@@ -282,6 +301,7 @@ public class Backpropagation {
 
 			System.out.println("");
 			outputData.newLine();
+			*/
 		}
 
 		System.out.println("Errores en test: " + testErrors + ". "

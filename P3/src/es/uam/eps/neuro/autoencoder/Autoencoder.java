@@ -10,6 +10,11 @@ public class Autoencoder {
 	private static OutputData outputData = new OutputData();
 	
 	public static void construye_bd_autoencoder(int n, String nombre_fichero){
+		if(n<1){
+			System.out.println("n tiene que ser > 1");
+			return;
+		}
+		
 		//Primera linea n n
 		outputData.add(n*n);
 		outputData.add(n*n);
@@ -79,6 +84,8 @@ public class Autoencoder {
 	}
 	
 	public static void construye_convinados(int n){
+		/*FALTAN CONVINACIONES DE DOS HORIZONTALES O DOS VERTICALES*/
+		
 		for(int l=0; l<n; l++){
 			for(int k=0; k<n; k++){
 				ArrayList<ArrayList<Integer>> tabla = new ArrayList<>();

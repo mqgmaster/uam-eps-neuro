@@ -3,11 +3,14 @@ package es.uam.eps.neuro.domain;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import es.uam.eps.neuro.autoencoder.Autoencoder;
+
 public class InputRow {
 	
 	private ArrayList<Double> inputs = new ArrayList<>();
 	private ArrayList<Integer> targetClass = new ArrayList<>();
 	private ArrayList<Integer> bipolarTargetClass = new ArrayList<>();
+	private ArrayList<Double> autoencoderTargetClass = new ArrayList<>();
 	private String target = "";
 	
 	public void add(Double input) {
@@ -34,6 +37,13 @@ public class InputRow {
 		bipolarTargetClass.add(value);
 	}
 	
+	public void addToAutoencoderTargetClass(String input) {
+		double value = -0.9;
+		if(Double.parseDouble(input)==1)
+			value = 0.9;
+		autoencoderTargetClass.add(value);
+	}
+	
 	public int getTargetClass(){
 		return targetClass.indexOf(Collections.max(targetClass));
 	}	
@@ -43,7 +53,11 @@ public class InputRow {
 	public int getBipolarTargetValue(int oputputNeuron){
 		return bipolarTargetClass.get(oputputNeuron);
 	}
-	
+
+	public ArrayList<Double> getAutoencoderTargetClass() {
+		return autoencoderTargetClass;
+	}
+
 	public Double get(int index) {
 		return inputs.get(index);
 	}
