@@ -1,8 +1,8 @@
 package es.uam.eps.neuro.backpropagation;
 
+import es.uam.eps.neuro.autoencoder.Autoencoder;
 import es.uam.eps.neuro.domain.InputData;
 import es.uam.eps.neuro.service.FileService;
-import es.uam.neuro.autoencoder.Autoencoder;
 
 public class Main {
 

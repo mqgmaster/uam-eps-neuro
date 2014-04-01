@@ -1,4 +1,4 @@
-package es.uam.neuro.autoencoder;
+package es.uam.eps.neuro.autoencoder;
 
 import java.util.ArrayList;
 
