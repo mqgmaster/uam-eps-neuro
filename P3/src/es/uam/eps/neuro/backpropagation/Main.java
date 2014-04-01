@@ -2,6 +2,7 @@ package es.uam.eps.neuro.backpropagation;
 
 import es.uam.eps.neuro.domain.InputData;
 import es.uam.eps.neuro.service.FileService;
+import es.uam.neuro.autoencoder.Autoencoder;
 
 public class Main {
 
@@ -37,7 +38,7 @@ public class Main {
 		//part5();
 		
 		//part6();
-		
+		Autoencoder.construye_bd_autoencoder(3, "patrones3.txt");
 	}
 	
 	//Tarea 2: chequeo del funcionamiento de la red con los ficheros de 
