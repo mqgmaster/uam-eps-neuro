@@ -10,7 +10,7 @@ public class Autoencoder {
 	private static OutputData outputData = new OutputData();
 	
 	public static void construye_bd_autoencoder(int n, String nombre_fichero){
-		if(n<1){
+		if(n<=1){
 			System.out.println("n tiene que ser > 1");
 			return;
 		}
@@ -55,6 +55,26 @@ public class Autoencoder {
 				}
 			}
 			outputData.newLine();
+			
+			for(int l=k+1; l<n; l++){
+				for(int i=0; i<n; i++){
+					for(int j=0; j<n; j++){
+						if(i==l)
+							outputData.add(1);
+						else
+							outputData.add(tabla.get(i).get(j));
+					}
+				}
+				for(int i=0; i<n; i++){
+					for(int j=0; j<n; j++){
+						if(i==l)
+							outputData.add(1);
+						else
+							outputData.add(tabla.get(i).get(j));
+					}
+				}
+				outputData.newLine();
+			}
 		}
 	}
 	
@@ -80,12 +100,30 @@ public class Autoencoder {
 				}
 			}
 			outputData.newLine();
+			
+			for(int l=k+1; l<n; l++){
+				for(int i=0; i<n; i++){
+					for(int j=0; j<n; j++){
+						if(j==l)
+							outputData.add(1);
+						else
+							outputData.add(tabla.get(i).get(j));
+					}
+				}
+				for(int i=0; i<n; i++){
+					for(int j=0; j<n; j++){
+						if(j==l)
+							outputData.add(1);
+						else
+							outputData.add(tabla.get(i).get(j));
+					}
+				}
+				outputData.newLine();
+			}
 		}
 	}
 	
 	public static void construye_convinados(int n){
-		/*FALTAN CONVINACIONES DE DOS HORIZONTALES O DOS VERTICALES*/
-		
 		for(int l=0; l<n; l++){
 			for(int k=0; k<n; k++){
 				ArrayList<ArrayList<Integer>> tabla = new ArrayList<>();
