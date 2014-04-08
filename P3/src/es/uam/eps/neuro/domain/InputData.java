@@ -173,5 +173,20 @@ public class InputData {
 			System.out.println("");
 		}
 	}
+	
+	public void printStats() {
+		System.out.println("Stats of database");
+		System.out.println("Means:");
+		ArrayList<Double> allMeans = calculateMean();
+		for (Double doub : allMeans) {
+			System.out.print(doub + "\t");
+		}
+		System.out.println("");
+		System.out.println("Standard deviations:");
+		for (Double doub : calculateStandardDeviation(allMeans)) {
+			System.out.print(doub + "\t");
+		}
+		System.out.println("");
+	}
 }
 

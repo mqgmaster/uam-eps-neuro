@@ -9,18 +9,9 @@ import es.uam.eps.neuro.domain.OutputData;
 
 public class Backpropagation {
 	// definiciones estaticas respeto a la respuesta de la neurona
-	public static final Double THRESHOLD = 0.2; // umbral
-	public static final Integer MAX_ROUNDS = 1000;
-	public static final Double ECM = 0.001;
-	public static final Double ECM_DIFF = 0.000001;
-
-	// definiciones respeto al fichero de entrada
-	public static final Double CLASS_ONE = 1.0;
-	public static final String CLASS_ONE_STRING = "0 1"; // debe ser exactamente la misma del fichero de entrada
-	public static final Double CLASS_TWO = -1.0;
-	public static final String CLASS_TWO_STRING = "1 0"; // debe ser exactamente la misma del fichero de entrada
-	public static final Double UNDEFINED = 0.0;
-	public static final String UNDEFINED_STRING = "0 0";
+	private static final Integer MAX_ROUNDS = 1000;
+	private static final Double ECM = 0.001;
+	private static final Double ECM_DIFF = 0.000001;
 
 	// variables principales del algoritmo
 	private ArrayList<ArrayList<Double>> wWeights = new ArrayList<>();
@@ -142,9 +133,9 @@ public class Backpropagation {
 					yk.add(bipolarSigmoid(aux)); // yk = f(y_ink)
 
 					auxECM += Math.pow(yk.get(k)-inputRow.getTargetValue(k),2);
-/** CALCULAR ERROR DE RECONSTRUCCION*/
-					
+
 				}
+				/** CALCULAR ERROR DE RECONSTRUCCION*/
 
 				/** 6) RETROPORGRAMACION DEL ERROR DE LA CAPA SALIDA **/
 				ArrayList<Double> errk = new ArrayList<>();
@@ -350,17 +341,7 @@ public class Backpropagation {
 		return testData;
 	}
 
-	public void setTestData(InputData testData) {
-		this.testData = testData;
-	}
-
 	public InputData getTrainingData() {
 		return trainingData;
 	}
-
-	public void setTrainingData(InputData trainingData) {
-		this.trainingData = trainingData;
-	}
-	
-	
 }
