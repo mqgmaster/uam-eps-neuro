@@ -3,8 +3,6 @@ package es.uam.eps.neuro.domain;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import es.uam.eps.neuro.autoencoder.Autoencoder;
-
 public class InputRow {
 	
 	private ArrayList<Double> inputs = new ArrayList<>();

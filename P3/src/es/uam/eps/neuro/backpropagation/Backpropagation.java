@@ -1,7 +1,6 @@
 package es.uam.eps.neuro.backpropagation;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 import es.uam.eps.neuro.domain.InputData;
 import es.uam.eps.neuro.domain.InputRow;
@@ -28,6 +27,7 @@ public class Backpropagation {
 	private InputData testData;
 	private OutputData outputData = new OutputData();
 	private OutputData outputECM = new OutputData();
+	int testPixelErrors = 0;
 
 	private int maxTrainingRounds = MAX_ROUNDS; // maximo de rondas de entrenamiento
 	private int testErrors = 0;
@@ -260,7 +260,8 @@ public class Backpropagation {
 			}
 
 			/** CLASIFICA SEGUN EL MAXIMO YK **/
-			for(int i=0; i<output.size(); i++){
+			testPixelErrors = 0;
+			for(int i=0; i< M ; i++){
 				if(yk.get(i)<0){
 					output.add(-0.9);
 					outputData.add(-0.9);
@@ -269,12 +270,15 @@ public class Backpropagation {
 					outputData.add(0.9);
 				}
 				
-				if(output.get(i)!=inputRow.getAutoencoderTargetClass().get(i)){
-					testErrors++;
+				if(!output.get(i).equals(inputRow.getAutoencoderTargetClass().get(i))){
+					testPixelErrors++;
 				}
-				System.out.print("Clase: predicha " + output.get(i) + "\treal: "
+				System.out.println("Clase: predicha " + output.get(i) + "\treal: "
 						+ inputRow.getAutoencoderTargetClass().get(i));
 			}
+			System.out.println("Errores de pixel: " + testPixelErrors + ". "
+					+ ((double) testPixelErrors / M)
+					* 100 + "%");
 			outputData.newLine();
 			/*
 			int outputClass = yk.indexOf(Collections.max(yk));
