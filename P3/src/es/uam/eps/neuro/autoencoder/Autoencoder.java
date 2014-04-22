@@ -10,12 +10,12 @@ public class Autoencoder {
 	private static OutputData outputData = new OutputData();
 	
 	public static void construye_bd_autoencoder(int n, String nombre_fichero){
-		if(n<=1){
+		if(n<1){
 			System.out.println("n tiene que ser > 1");
 			return;
 		}
 		
-		//Primera linea n n
+		//Primera linea n^2 n^2
 		outputData.add(n*n);
 		outputData.add(n*n);
 		outputData.newLine();
@@ -56,26 +56,32 @@ public class Autoencoder {
 			}
 			outputData.newLine();
 			
+			
 			for(int l=k+1; l<n; l++){
 				for(int i=0; i<n; i++){
 					for(int j=0; j<n; j++){
-						if(i==l)
+						if(i==l){
 							outputData.add(1);
-						else
+						}else{
 							outputData.add(tabla.get(i).get(j));
+						}
 					}
 				}
 				for(int i=0; i<n; i++){
 					for(int j=0; j<n; j++){
-						if(i==l)
+						if(i==l){
 							outputData.add(1);
-						else
+						}else{
 							outputData.add(tabla.get(i).get(j));
+						}
 					}
 				}
 				outputData.newLine();
 			}
 		}
+		
+		
+		
 	}
 	
 	public static void construye_verticales(int n){
@@ -104,18 +110,20 @@ public class Autoencoder {
 			for(int l=k+1; l<n; l++){
 				for(int i=0; i<n; i++){
 					for(int j=0; j<n; j++){
-						if(j==l)
+						if(j==l){
 							outputData.add(1);
-						else
+						}else{
 							outputData.add(tabla.get(i).get(j));
+						}
 					}
 				}
 				for(int i=0; i<n; i++){
 					for(int j=0; j<n; j++){
-						if(j==l)
+						if(j==l){
 							outputData.add(1);
-						else
+						}else{
 							outputData.add(tabla.get(i).get(j));
+						}
 					}
 				}
 				outputData.newLine();
@@ -148,6 +156,36 @@ public class Autoencoder {
 				outputData.newLine();
 			}
 		}
+	}
+	
+	public static void adapta_fichero_serie(String entrada, String salida, int np){
+		//Lee el fichero de entrada
+		ArrayList<String> data = FileService.read(entrada);
+		
+		//Comprueba el numero de puntos de la serie y el numero de puntos anteriores (np)
+		if(data.size()<=np){
+			System.out.println("El numero de puntos de la serie es menor o igual que el numero de puntos anteriores (np)");
+			return;
+		}
+		
+		//Crea fichero con el formato indicado
+		OutputData outputData = new OutputData();
+		//Cabecera
+		outputData.add(np+" 2");
+		outputData.newLine();
+		//Datos
+		for(int i=0; i<data.size()-np; i++){
+			for(int j=0; j<np; j++){
+				outputData.add(data.get(i+j));
+			}
+
+			if(Double.parseDouble(data.get(i+np))>Double.parseDouble(data.get(i+np-1)))
+				outputData.add("1 0"); //Aumenta
+			else
+				outputData.add("0 1"); //No aumenta
+			outputData.newLine();
+		}
+		FileService.save(salida, outputData.getFileLines());
 	}
 	
 }

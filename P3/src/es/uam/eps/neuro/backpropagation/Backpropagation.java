@@ -27,7 +27,7 @@ public class Backpropagation {
 	private InputData testData;
 	private OutputData outputData = new OutputData();
 	private OutputData outputECM = new OutputData();
-	int testPixelErrors = 0;
+	private int testPixelErrors = 0;
 
 	private int maxTrainingRounds = MAX_ROUNDS; // maximo de rondas de entrenamiento
 	private int testErrors = 0;
@@ -228,7 +228,7 @@ public class Backpropagation {
 			yk = new ArrayList<>();
 
 			/** 3) ESTABLECE LAS NEURONAS DE ENTRADA **/
-			inputRow = trainingData.getRows().get(r);
+			inputRow = testData.getRows().get(r);
 			// para cada linha
 			for (Double input : inputRow.getAll()) {
 				System.out.print(input + "\t");

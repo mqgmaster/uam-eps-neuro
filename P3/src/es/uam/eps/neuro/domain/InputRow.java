@@ -10,12 +10,28 @@ public class InputRow {
 	private ArrayList<Integer> bipolarTargetClass = new ArrayList<>();
 	private ArrayList<Double> autoencoderTargetClass = new ArrayList<>();
 	private String target = "";
+	private boolean encoded;
+	
+	public InputRow() {
+		encoded = true;
+	}
+	
+	public InputRow(boolean encoded) {
+		this.encoded = encoded;
+	}
 	
 	public void add(Double input) {
-		inputs.add(input);
+		if (encoded) {
+			if(input==0)
+				inputs.add(-0.9);
+			else
+				inputs.add(0.9);
+		} else {
+			inputs.add(input);
+		}
 		//System.out.println("add " + input);
 	}
-
+	
 	public void addToTargetRepresentation(String input) {
 		if (target.isEmpty()) {
 			target = input;

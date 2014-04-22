@@ -13,8 +13,10 @@ public class InputData {
 	//Array de Array de entradas
 	private List<InputRow> inputData = new ArrayList<>();
 	private boolean shuffled = false;
+	private boolean encoded;
 	
-	public InputData(ArrayList<String> fileLines) {
+	public InputData(ArrayList<String> fileLines, boolean encoded) {
+		this.encoded = encoded;
 		this.fileLines = fileLines;
 		params = fileLines.remove(0);
 		String[] paramsVector = params.split(" ");
@@ -70,7 +72,7 @@ public class InputData {
 			fileLines.remove(0);
 		}
 		for (String inputs : fileLines) {
-			InputRow inputRow = new InputRow();
+			InputRow inputRow = new InputRow(encoded);
 			//remove duplicate spaces. Eso es un overhead. El archivo de entrada
 			//deberia ser standard.
 			String[] inputsArray = inputs.replaceAll("\\s+", " ").split(" ");
