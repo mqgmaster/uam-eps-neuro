@@ -132,10 +132,29 @@ public class Backpropagation {
 					y_ink.add(aux);
 					yk.add(bipolarSigmoid(aux)); // yk = f(y_ink)
 
+					//System.out.println(yk.get(k) + " " + inputRow.getAutoencoderTargetClass().get(k));
 					auxECM += Math.pow(yk.get(k)-inputRow.getTargetValue(k),2);
 
 				}
 				/** CALCULAR ERROR DE RECONSTRUCCION*/
+				testPixelErrors = 0;
+				ArrayList<Double> output = new ArrayList<>();
+				for(int i=0; i< M ; i++){
+					if(yk.get(i)<0){
+						output.add(-0.9);
+					}else{
+						output.add(0.9);
+					}
+					
+					if(!output.get(i).equals(inputRow.getTargetValue(i))){
+						testPixelErrors++;
+					}
+					//System.out.println("Clase: predicha " + output.get(i) + "\treal: "
+						//	+ inputRow.getAutoencoderTargetClass().get(i));
+				}
+				//System.out.println("Errores de pixel: " + testPixelErrors + ". "
+				//		+ ((double) testPixelErrors / M)
+				//		* 100 + "%");
 
 				/** 6) RETROPORGRAMACION DEL ERROR DE LA CAPA SALIDA **/
 				ArrayList<Double> errk = new ArrayList<>();
@@ -160,7 +179,7 @@ public class Backpropagation {
 					}
 				}
 
-				/** 7) RETROPORGRAMACION DEL ERROR DE LA CAPA OCULTA **/
+				/** 7) RETROPROPAGACION DEL ERROR DE LA CAPA OCULTA **/
 				// err_inj = SUMk->M(errk*wjk)
 				for (int j = 1; j < P; j++) {
 					double aux = 0.0;
@@ -261,6 +280,7 @@ public class Backpropagation {
 
 			/** CLASIFICA SEGUN EL MAXIMO YK **/
 			testPixelErrors = 0;
+			output = new ArrayList<>();
 			for(int i=0; i< M ; i++){
 				if(yk.get(i)<0){
 					output.add(-0.9);
@@ -270,12 +290,13 @@ public class Backpropagation {
 					outputData.add(0.9);
 				}
 				
-				if(!output.get(i).equals(inputRow.getAutoencoderTargetClass().get(i))){
+				if(!output.get(i).equals(inputRow.getTargetValue(i))){
 					testPixelErrors++;
 				}
 				System.out.println("Clase: predicha " + output.get(i) + "\treal: "
-						+ inputRow.getAutoencoderTargetClass().get(i));
+						+ inputRow.getTargetValue(i));
 			}
+			testErrors += testPixelErrors;
 			System.out.println("Errores de pixel: " + testPixelErrors + ". "
 					+ ((double) testPixelErrors / M)
 					* 100 + "%");
@@ -299,9 +320,7 @@ public class Backpropagation {
 			*/
 		}
 
-		System.out.println("Errores en test: " + testErrors + ". "
-						+ ((double) testErrors / testData.getRows().size())
-						* 100 + "%");
+		System.out.println("Errores totales: " + (double)testErrors/(9*22));
 		return ((double) testErrors / testData.getRows().size()) * 100;
 	}
 

@@ -84,8 +84,6 @@ public class InputData {
 				} else {
 					inputRow.addToTargetRepresentation(input);
 					inputRow.addToTargetClass(input);
-					inputRow.addToBipolarTargetClass(input);
-					inputRow.addToAutoencoderTargetClass(input);
 				}
 			}
 			inputData.add(inputRow);

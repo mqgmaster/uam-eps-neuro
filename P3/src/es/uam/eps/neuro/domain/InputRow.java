@@ -6,9 +6,7 @@ import java.util.Collections;
 public class InputRow {
 	
 	private ArrayList<Double> inputs = new ArrayList<>();
-	private ArrayList<Integer> targetClass = new ArrayList<>();
-	private ArrayList<Integer> bipolarTargetClass = new ArrayList<>();
-	private ArrayList<Double> autoencoderTargetClass = new ArrayList<>();
+	private ArrayList<Double> targetClass = new ArrayList<>();
 	private String target = "";
 	private boolean encoded;
 	
@@ -41,35 +39,22 @@ public class InputRow {
 	}
 	
 	public void addToTargetClass(String input) {
-		targetClass.add(Integer.parseInt(input));
-	}
-	
-	public void addToBipolarTargetClass(String input) {
-		int value = -1;
-		if(Integer.parseInt(input)==1)
-			value = 1;
-		bipolarTargetClass.add(value);
-	}
-	
-	public void addToAutoencoderTargetClass(String input) {
-		double value = -0.9;
-		if(Double.parseDouble(input)==1)
-			value = 0.9;
-		autoencoderTargetClass.add(value);
+		if (encoded) {
+			double value = -0.9;
+			if(Double.parseDouble(input)==1) {
+				value = 0.9;
+			}
+			targetClass.add(value);
+		} else {
+			targetClass.add(Double.valueOf(input));
+		}
 	}
 	
 	public int getTargetClass(){
 		return targetClass.indexOf(Collections.max(targetClass));
 	}	
-	public int getTargetValue(int oputputNeuron){
+	public double getTargetValue(int oputputNeuron){
 		return targetClass.get(oputputNeuron);
-	}
-	public int getBipolarTargetValue(int oputputNeuron){
-		return bipolarTargetClass.get(oputputNeuron);
-	}
-
-	public ArrayList<Double> getAutoencoderTargetClass() {
-		return autoencoderTargetClass;
 	}
 
 	public Double get(int index) {
