@@ -1,6 +1,7 @@
 package es.uam.eps.neuro.backpropagation;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import es.uam.eps.neuro.domain.InputData;
 import es.uam.eps.neuro.domain.InputRow;
@@ -20,17 +21,17 @@ public class Backpropagation {
 	private int R; // R = number of training samples
 	private int N; // N = number of attributes + x0 bias
 	private int P; // P = number of neurons in the hidden layer + z0 bias
-	private int M; // M = number of target classes
+	protected int M; // M = number of target classes
 
 	private double learningRate; // constante de entrenamiento
 	private InputData trainingData;
 	private InputData testData;
-	private OutputData outputData = new OutputData();
+	protected OutputData outputData = new OutputData();
 	private OutputData outputECM = new OutputData();
-	private int testPixelErrors = 0;
+	protected int testPixelErrors = 0;
 
 	private int maxTrainingRounds = MAX_ROUNDS; // maximo de rondas de entrenamiento
-	private int testErrors = 0;
+	protected int testErrors = 0;
 
 	public Backpropagation(InputData data, Double trainingDataPrecentage,
 			double learningRate, int numNeuronHiddenLayer) {
@@ -222,7 +223,7 @@ public class Backpropagation {
 //			outputECM.add(prevECM-ecm);
 			outputECM.newLine();
 			System.out.println("Errores en entrenamiento ECM: " + ecm + ". Diff"+(prevECM-ecm)+" En " + (round+1) + " iteraciones");
-			if(ecm<=ECM || prevECM-ecm<ECM_DIFF){
+			if(ecm<=ECM || Math.abs(prevECM-ecm)<ECM_DIFF){
 				break;
 			}
 			prevECM = ecm;
@@ -237,7 +238,6 @@ public class Backpropagation {
 		ArrayList<Double> zj = new ArrayList<>();
 		ArrayList<Double> y_ink = new ArrayList<>();
 		ArrayList<Double> yk = new ArrayList<>();
-		ArrayList<Double> output = new ArrayList<>();
 
 		for (int r = 0; r < testData.getRows().size(); r++) {
 			xi = new ArrayList<>();
@@ -278,50 +278,30 @@ public class Backpropagation {
 				yk.add(bipolarSigmoid(aux)); // yk = f(y_ink)
 			}
 
-			/** CLASIFICA SEGUN EL MAXIMO YK **/
-			testPixelErrors = 0;
-			output = new ArrayList<>();
-			for(int i=0; i< M ; i++){
-				if(yk.get(i)<0){
-					output.add(-0.9);
-					outputData.add(-0.9);
-				}else{
-					output.add(0.9);
-					outputData.add(0.9);
-				}
-				
-				if(!output.get(i).equals(inputRow.getTargetValue(i))){
-					testPixelErrors++;
-				}
-				System.out.println("Clase: predicha " + output.get(i) + "\treal: "
-						+ inputRow.getTargetValue(i));
-			}
-			testErrors += testPixelErrors;
-			System.out.println("Errores de pixel: " + testPixelErrors + ". "
-					+ ((double) testPixelErrors / M)
-					* 100 + "%");
-			outputData.newLine();
-			/*
-			int outputClass = yk.indexOf(Collections.max(yk));
-			for(int i=0; i<testData.getTotalTargets(); i++){
-				if(i==outputClass)
-					outputData.add(1);
-				else
-					outputData.add(0);
-			}
-			System.out.print("Clase: predicha " + outputClass + "\treal: "
-					+ inputRow.getTargetClass());
-			if (outputClass != inputRow.getTargetClass()) {
-				testErrors++;
-			}
-
-			System.out.println("");
-			outputData.newLine();
-			*/
+			classify(inputRow, yk);
 		}
 
-		System.out.println("Errores totales: " + (double)testErrors/(9*22));
+		System.out.println("Errores totales: " + ((double) testErrors / testData.getRows().size()) * 100);
 		return ((double) testErrors / testData.getRows().size()) * 100;
+	}
+	
+	public void classify(InputRow inputRow, ArrayList<Double> yk) {
+		//mirar cuando hay un empate !!!!!
+		int outputClass = yk.indexOf(Collections.max(yk));
+		for(int i=0; i<testData.getTotalTargets(); i++){
+			if(i==outputClass)
+				outputData.add(1);
+			else
+				outputData.add(0);
+		}
+		System.out.print("Clase: predicha " + outputClass + "\treal: "
+				+ inputRow.getTargetClass());
+		if (outputClass != inputRow.getTargetClass()) {
+			testErrors++;
+		}
+
+		System.out.println("");
+		outputData.newLine();
 	}
 
 	protected void printWeights() {
