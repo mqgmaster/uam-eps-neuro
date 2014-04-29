@@ -9,7 +9,7 @@ import es.uam.eps.neuro.domain.OutputData;
 
 public class Backpropagation {
 	// definiciones estaticas respeto a la respuesta de la neurona
-	private static final Integer MAX_ROUNDS = 1000;
+	private static final Integer MAX_ROUNDS = 10000;
 	private static final Double ECM = 0.001;
 	private static final Double ECM_DIFF = 0.000001;
 
@@ -222,7 +222,7 @@ public class Backpropagation {
 			outputECM.add(ecm);
 //			outputECM.add(prevECM-ecm);
 			outputECM.newLine();
-			System.out.println("Errores en entrenamiento ECM: " + ecm + ". Diff"+(prevECM-ecm)+" En " + (round+1) + " iteraciones");
+//			System.out.println("Errores en entrenamiento ECM: " + ecm + ". Diff"+(prevECM-ecm)+" En " + (round+1) + " iteraciones");
 			if(ecm<=ECM || Math.abs(prevECM-ecm)<ECM_DIFF){
 				break;
 			}
@@ -250,7 +250,7 @@ public class Backpropagation {
 			inputRow = testData.getRows().get(r);
 			// para cada linha
 			for (Double input : inputRow.getAll()) {
-				System.out.print(input + "\t");
+//				System.out.print(input + "\t");
 			}
 			xi = new ArrayList<Double>(inputRow.getAll());
 			xi.add(0, 1.0); // bias
@@ -286,7 +286,6 @@ public class Backpropagation {
 	}
 	
 	public void classify(InputRow inputRow, ArrayList<Double> yk) {
-		//mirar cuando hay un empate !!!!!
 		int outputClass = yk.indexOf(Collections.max(yk));
 		for(int i=0; i<testData.getTotalTargets(); i++){
 			if(i==outputClass)
@@ -294,13 +293,13 @@ public class Backpropagation {
 			else
 				outputData.add(0);
 		}
-		System.out.print("Clase: predicha " + outputClass + "\treal: "
-				+ inputRow.getTargetClass());
+//		System.out.print("Clase: predicha " + outputClass + "\treal: "
+//				+ inputRow.getTargetClass());
 		if (outputClass != inputRow.getTargetClass()) {
 			testErrors++;
 		}
 
-		System.out.println("");
+//		System.out.println("");
 		outputData.newLine();
 	}
 
