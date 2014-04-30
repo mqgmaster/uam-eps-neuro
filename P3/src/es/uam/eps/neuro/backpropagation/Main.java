@@ -1,7 +1,5 @@
 package es.uam.eps.neuro.backpropagation;
 
-import java.util.ArrayList;
-
 import es.uam.eps.neuro.autoencoder.Autoencoder;
 import es.uam.eps.neuro.domain.InputData;
 import es.uam.eps.neuro.service.FileService;
@@ -26,14 +24,18 @@ public class Main {
 		neural = new BackpropagationEncoded(data, 1.0, 0.3, 4);
 		neural.startTraining();
 		neural.startTest();
-		FileService.save("results/data_4.txt", neural.getOutputData().getFileLines());
-		FileService.save("results/data_ecm_4.txt", neural.getOutputECM().getFileLines());
+		FileService.save("results/p1_data_4.txt", neural.getOutputData().getFileLines());
+		FileService.save("results/p1_data_ecm_4.txt", neural.getOutputECM().getFileLines());
+		FileService.save("results/p1_data_pixelErr_4.txt", neural.getOutputPixelError().getFileLines());
+		FileService.save("results/p1_data_wheights_4.txt", neural.getOutputWeights().getFileLines());
 		
 		neural = new BackpropagationEncoded(data, 1.0, 0.3, 5);
 		neural.startTraining();
 		neural.startTest();
-		FileService.save("results/data_5.txt", neural.getOutputData().getFileLines());
-		FileService.save("results/data_ecm_5.txt", neural.getOutputECM().getFileLines());
+		FileService.save("results/p1_data_5.txt", neural.getOutputData().getFileLines());
+		FileService.save("results/p1_data_ecm_5.txt", neural.getOutputECM().getFileLines());
+		FileService.save("results/p1_data_pixelErr_5.txt", neural.getOutputPixelError().getFileLines());
+		FileService.save("results/p1_data_wheights_5.txt", neural.getOutputWeights().getFileLines());
 	}
 		
 	private static void part2() {

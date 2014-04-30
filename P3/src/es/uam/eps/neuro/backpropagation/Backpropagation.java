@@ -28,6 +28,8 @@ public class Backpropagation {
 	private InputData testData;
 	protected OutputData outputData = new OutputData();
 	private OutputData outputECM = new OutputData();
+	private OutputData outputPixelError = new OutputData();
+	private OutputData outputWeights = new OutputData();
 	protected int testPixelErrors = 0;
 
 	private int maxTrainingRounds = MAX_ROUNDS; // maximo de rondas de entrenamiento
@@ -98,6 +100,7 @@ public class Backpropagation {
 		 **/
 		for (int round = 0; round < maxTrainingRounds; round++) {
 			double auxECM = 0.0;
+			double totalPixelError = 0.0;
 			/** 2) PARA CADA CONJUNTO DE ENTRENAMIENTO **/
 			for (int r = 0; r < R; r++) {
 				xi = new ArrayList<>();
@@ -150,6 +153,7 @@ public class Backpropagation {
 					if(!output.get(i).equals(inputRow.getTargetValue(i))){
 						testPixelErrors++;
 					}
+					totalPixelError +=testPixelErrors;
 					//System.out.println("Clase: predicha " + output.get(i) + "\treal: "
 						//	+ inputRow.getAutoencoderTargetClass().get(i));
 				}
@@ -219,6 +223,9 @@ public class Backpropagation {
 				}
 			}
 			double ecm = auxECM/R;
+			totalPixelError = totalPixelError/((double)(M*R));
+			outputPixelError.add(totalPixelError);
+			outputPixelError.newLine();
 			outputECM.add(ecm);
 //			outputECM.add(prevECM-ecm);
 			outputECM.newLine();
@@ -228,6 +235,9 @@ public class Backpropagation {
 			}
 			prevECM = ecm;
 		}
+		
+		printWeights(wWeights);
+		printWeights(vWeights);
 	}
 
 	public double startTest() {
@@ -238,7 +248,8 @@ public class Backpropagation {
 		ArrayList<Double> zj = new ArrayList<>();
 		ArrayList<Double> y_ink = new ArrayList<>();
 		ArrayList<Double> yk = new ArrayList<>();
-
+		testErrors = 0;
+		
 		for (int r = 0; r < testData.getRows().size(); r++) {
 			xi = new ArrayList<>();
 			z_inj = new ArrayList<>();
@@ -249,9 +260,9 @@ public class Backpropagation {
 			/** 3) ESTABLECE LAS NEURONAS DE ENTRADA **/
 			inputRow = testData.getRows().get(r);
 			// para cada linha
-			for (Double input : inputRow.getAll()) {
+//			for (Double input : inputRow.getAll()) {
 //				System.out.print(input + "\t");
-			}
+//			}
 			xi = new ArrayList<Double>(inputRow.getAll());
 			xi.add(0, 1.0); // bias
 
@@ -281,7 +292,7 @@ public class Backpropagation {
 			classify(inputRow, yk);
 		}
 
-		System.out.println("Errores totales: " + ((double) testErrors / testData.getRows().size()) * 100);
+		System.out.println("Errores totales: " + ((double) testErrors / testData.getRows().size()) * 100+"\n");
 		return ((double) testErrors / testData.getRows().size()) * 100;
 	}
 	
@@ -303,13 +314,15 @@ public class Backpropagation {
 		outputData.newLine();
 	}
 
-	protected void printWeights() {
-		for (int i = 0; i < wWeights.size(); i++) {
-			System.out.print(wWeights.get(i) + "\t");
-			System.out.print("-\t");
+	protected void printWeights(ArrayList<ArrayList<Double>> weights) {
+		for (int i = 0; i < weights.size(); i++) {
+			for(int j=0; j<weights.get(i).size(); j++){
+				outputWeights.add(weights.get(i).get(j));
+			}
+			outputWeights.newLine();
 		}
-		// System.out.print(wbias + "\t");
-		System.out.println("-\t");
+		outputWeights.newLine();
+		outputWeights.newLine();
 	}
 
 
@@ -337,6 +350,14 @@ public class Backpropagation {
 
 	public OutputData getOutputECM() {
 		return outputECM;
+	}
+	
+	public OutputData getOutputPixelError() {
+		return outputPixelError;
+	}
+	
+	public OutputData getOutputWeights() {
+		return outputWeights;
 	}
 
 	public InputData getTestData() {
